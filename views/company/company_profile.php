@@ -37,7 +37,7 @@ $company = $companyModel->getCompanyByUserId($_SESSION['user_id']);
         <label for="company_logo">Company Logo:</label>
         <input type="file" id="company_logo" name="company_logo">
         <?php if ($company && $company['company_logo']): ?>
-            <img src="<?php echo html_escape($company['company_logo']); ?>" alt="Company Logo" style="max-width: 100px;">
+            <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" style="max-width: 100px;">
         <?php endif; ?>
     </div>
 

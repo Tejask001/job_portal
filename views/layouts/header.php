@@ -1,6 +1,7 @@
 <?php
 session_start(); // Ensure session is started at the top of each page
 require_once __DIR__ . '/../../config/database.php';
+require_once __DIR__ . '/../../config/functions.php';
 
 // Helper function to generate URLs correctly.
 function generate_url($path)

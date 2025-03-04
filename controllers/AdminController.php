@@ -1,24 +1,21 @@
 <?php
-//session_start();
+// session_start();
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Job.php';
-
-function redirect($url)
-{
-    header("Location: " . $url);
-    exit();
-}
+require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class AdminController
 {
     private $userModel;
     private $jobModel;
+    private $pdo;
 
     public function __construct($pdo)
     {
         $this->userModel = new User($pdo);
         $this->jobModel = new Job($pdo);
+        $this->pdo = $pdo;
     }
 
     public function getAllUsers()
@@ -66,4 +63,30 @@ class AdminController
     {
         return $this->jobModel->getAllJobs();
     }
+
+    public function handleRequest()
+    {
+        if (isset($_GET['action'])) {
+            $action = $_GET['action'];
+
+            switch ($action) {
+                case 'delete_user':
+                    $this->deleteUser($_GET['id'] ?? '');
+                    break;
+                case 'approve_job':
+                    $this->approveJob($_GET['id'] ?? '');
+                    break;
+                case 'unapprove_job':
+                    $this->unapproveJob($_GET['id'] ?? '');
+                    break;
+                default:
+                    echo "Invalid action.";
+                    break;
+            }
+        }
+    }
 }
+
+// Create an instance and handle the request
+$adminController = new AdminController($pdo);
+$adminController->handleRequest();

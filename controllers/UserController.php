@@ -5,12 +5,7 @@ require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Resume.php';
 require_once __DIR__ . '/../models/Job.php'; // Add Job Model for saved jobs
 require_once __DIR__ . '/../models/Application.php';
-
-function redirect($url)
-{
-    header("Location: " . $url);
-    exit();
-}
+require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class UserController
 {

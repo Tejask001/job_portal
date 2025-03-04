@@ -1,13 +1,9 @@
 <?php
-//session_start(); // Make sure this is at the VERY top of the file!
+session_start(); // Make sure this is at the VERY top of the file!
 
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
-function redirect($url)
-{
-    header("Location: " . $url);
-    exit();
-}
+require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class AuthController
 {
