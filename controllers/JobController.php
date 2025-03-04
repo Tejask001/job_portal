@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/Job.php';
 require_once __DIR__ . '/../models/Application.php';
@@ -70,6 +70,16 @@ class JobController
 
     public function applyForJob($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit)
     {
+        // Check if the user has already applied for this job
+        var_dump($job_id, $user_id);
+        $alreadyApplied = $this->hasUserApplied($job_id, $user_id);
+
+        if ($alreadyApplied) {
+            $_SESSION['error_message'] = "You have already applied for this job.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/jobs/apply.php?id=' . $job_id);
+            return;
+        }
+
         if (empty($name) || empty($email) || empty($phone) || empty($resume_path) || empty($why_are_you_fit)) {
             $_SESSION['error_message'] = "All fields are required.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/jobs/apply.php?id=' . $job_id);
@@ -90,6 +100,16 @@ class JobController
     public function getJobsByCompanyId($company_id)
     {
         return $this->jobModel->getJobsByCompanyId($company_id);
+    }
+
+    // Helper function to check if a user has already applied for a job
+    private function hasUserApplied($job_id, $user_id)
+    {
+        //global $pdo;   Removed global keyword.
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM job_applications WHERE job_id = ? AND user_id = ?");
+        $stmt->execute([$job_id, $user_id]);
+        $count = $stmt->fetchColumn();
+        return $count > 0;
     }
 
     public function handleRequest()

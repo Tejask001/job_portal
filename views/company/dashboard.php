@@ -30,6 +30,7 @@ $jobs = $jobController->getJobsByCompanyId($company['id']);
 
 <a href="<?php echo generate_url('views/company/post_job.php'); ?>" class="btn">Post a New Job</a>
 <a href="<?php echo generate_url('views/company/company_profile.php'); ?>" class="btn">Edit Company Profile</a>
+<a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn">Manage Applications</a>
 
 <h2>My Job Postings</h2>
 
@@ -54,6 +55,7 @@ $jobs = $jobController->getJobsByCompanyId($company['id']);
                     <td>
                         <a href="<?php echo generate_url('views/company/edit_job.php?id=' . html_escape($job['id'])); ?>">Edit</a>
                         <a href="<?php echo generate_url('controllers/JobController.php?action=delete_job&id=' . html_escape($job['id'])); ?>" onclick="return confirm('Are you sure you want to delete this job?');">Delete</a>
+
                     </td>
                 </tr>
             <?php endforeach; ?>

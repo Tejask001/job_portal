@@ -12,6 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seeker') {
 require_once __DIR__ . '/../../controllers/UserController.php';
 $userController = new UserController($pdo);
 $applications = $userController->getApplicationsByUserId($_SESSION['user_id']);
+$notifications = $userController->getNotificationsByUserId($_SESSION['user_id']);
 ?>
 
 <h1>Welcome, <?php echo html_escape($_SESSION['user_name']); ?>!</h1>
@@ -29,6 +30,28 @@ $applications = $userController->getApplicationsByUserId($_SESSION['user_id']);
                         <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>">
                             <?php echo html_escape($application['title']); ?>
                         </a> - Applied on: <?php echo html_escape($application['applied_at']); ?>
+                        <?php if ($application['application_status'] == 'approved'): ?>
+                            - Status: Approved
+                        <?php elseif ($application['application_status'] == 'rejected'): ?>
+                            - Status: Rejected
+                        <?php else: ?>
+                            - Status: Pending
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+    <div class="column">
+        <h2>Notifications</h2>
+        <?php if (empty($notifications)): ?>
+            <p>No new notifications.</p>
+        <?php else: ?>
+            <ul>
+                <?php foreach ($notifications as $notification): ?>
+                    <li>
+                        <?php echo html_escape($notification['message']); ?>
+                        <small> - <?php echo html_escape($notification['created_at']); ?></small>
                     </li>
                 <?php endforeach; ?>
             </ul>

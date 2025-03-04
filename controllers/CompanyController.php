@@ -1,18 +1,23 @@
 <?php
-session_start(); // Add session_start() back
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/Company.php';
+require_once __DIR__ . '/../models/Application.php';
+require_once __DIR__ . '/../models/Notification.php'; //Include noification model
 require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class CompanyController
 {
     private $companyModel;
-    private $pdo;  // Add PDO property
+    private $applicationModel;
+    private $notificationModel;
+    private $pdo;
 
     public function __construct($pdo)
     {
         $this->companyModel = new Company($pdo);
-        $this->pdo = $pdo; // Initialize PDO
+        $this->applicationModel = new Application($pdo);
+        $this->notificationModel = new Notification($pdo);
+        $this->pdo = $pdo;
     }
 
     public function createCompany($user_id, $company_name, $company_logo, $company_description)
@@ -78,6 +83,41 @@ class CompanyController
         return ''; // Return an empty string if no logo was uploaded or if upload failed
     }
 
+    public function getJobApplications($company_id)
+    {
+        return $this->applicationModel->getApplicationsForCompany($company_id);
+    }
+
+    public function updateApplicationStatus($application_id, $status)
+    {
+        $updated = $this->applicationModel->updateApplicationStatus($application_id, $status);
+
+        if ($updated) {
+            // Get the application details to retrieve user_id
+            $application = $this->applicationModel->getApplicationById($application_id);
+
+            if ($application) {
+                $user_id = $application['user_id'];
+                $job_id = $application['job_id'];
+
+                // Create the notification message
+                $message = "Your application for the job with ID " . $job_id . " has been " . $status . ".";
+
+                // Create notification for user in DB
+                $this->notificationModel->createNotification($user_id, $message);
+
+                $_SESSION['success_message'] = "Application status updated successfully!";
+            } else {
+                $_SESSION['error_message'] = "Application status updated successfully, however notification could not be created due to application ID";
+            }
+
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/manage_applications.php');
+        } else {
+            $_SESSION['error_message'] = "Failed to update application status. Please try again.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/manage_applications.php');
+        }
+    }
+
     public function handleRequest()
     {
         if (isset($_GET['action'])) {
@@ -101,6 +141,12 @@ class CompanyController
                         $_POST['company_name'] ?? '',
                         $company_logo, // Pass the processed company_logo
                         $_POST['company_description'] ?? ''
+                    );
+                    break;
+                case 'update_application_status':
+                    $this->updateApplicationStatus(
+                        $_GET['application_id'] ?? '',
+                        $_GET['status'] ?? ''
                     );
                     break;
                 default:

@@ -1,10 +1,11 @@
 <?php
-//session_start();
+// session_start();
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Resume.php';
 require_once __DIR__ . '/../models/Job.php'; // Add Job Model for saved jobs
 require_once __DIR__ . '/../models/Application.php';
+require_once __DIR__ . '/../models/Notification.php';
 require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class UserController
@@ -13,6 +14,7 @@ class UserController
     private $resumeModel;
     private $jobModel; // Add Job Model
     private $applicationModel;
+    private $notificationModel;
     private $pdo;
 
     public function __construct($pdo)
@@ -21,7 +23,8 @@ class UserController
         $this->resumeModel = new Resume($pdo);
         $this->jobModel = new Job($pdo); // Initialize Job Model
         $this->applicationModel = new Application($pdo);
-        $this->pdo = $pdo; // Store the PDO object
+        $this->notificationModel = new Notification($pdo);
+        $this->pdo = $pdo;
     }
 
     public function updateUserProfile($id, $name, $email)
@@ -136,19 +139,33 @@ class UserController
     // Saved Jobs Functions
     public function saveJob($job_id, $user_id)
     {
-        global $pdo;
+        //global $pdo; //Remove the global variable. It is available in the class
+
+        echo "saveJob called with job_id: " . html_escape($job_id) . " and user_id: " . html_escape($user_id) . "<br>"; // Debugging
+        var_dump($this->pdo);  // Check PDO connection
+
         try {
-            $stmt = $pdo->prepare("INSERT INTO saved_jobs (job_id, user_id) VALUES (?, ?)");
+            echo "Preparing SQL statement...<br>"; // Debugging
+            $stmt = $this->pdo->prepare("INSERT INTO saved_jobs (job_id, user_id) VALUES (?, ?)");
+            echo "SQL statement prepared successfully.<br>"; // Debugging
+            echo "Executing SQL statement...<br>"; // Debugging
             $stmt->execute([$job_id, $user_id]);
+            echo "SQL statement executed successfully.<br>"; // Debugging
+
             $_SESSION['success_message'] = "Job saved successfully!";
+            echo "Success message set.<br>"; // Debugging
         } catch (PDOException $e) {
-            if ($e->getCode() == '23000') { // Duplicate entry
-                $_SESSION['error_message'] = "Job already saved!";
-            } else {
-                $_SESSION['error_message'] = "Failed to save job: " . $e->getMessage();
-            }
+            $_SESSION['error_message'] = "Failed to save job: " . $e->getMessage();
+            error_log("Error saving job: " . $e->getMessage()); // Log the error
+
+            // Display the error message for debugging
+            echo "Database Error: " . $e->getMessage() . "<br>";
         }
+
+        echo "Before redirect... HTTP_REFERER is: " . ($_SERVER['HTTP_REFERER'] ?? 'Not Set') . "<br>";
         redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/jobs/job_details.php?id=' . $job_id); // Redirect back to job details page
+        echo "After redirect (this should not be displayed).<br>"; //Debug
+
     }
 
     public function unsaveJob($job_id, $user_id)
@@ -199,6 +216,11 @@ class UserController
     public function getApplicationsByUserId($user_id)
     {
         return $this->applicationModel->getApplicationsByUserId($user_id);
+    }
+
+    public function getNotificationsByUserId($user_id)
+    {
+        return $this->notificationModel->getNotificationsByUserId($user_id);
     }
 
     // Handle requests based on the 'action' parameter

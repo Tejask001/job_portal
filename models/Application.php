@@ -43,4 +43,23 @@ class Application
         $stmt->execute([$id]);
         return $stmt->rowCount();
     }
+
+    public function updateApplicationStatus($application_id, $status)
+    {
+        $stmt = $this->pdo->prepare("UPDATE job_applications SET application_status = ? WHERE id = ?");
+        $stmt->execute([$status, $application_id]);
+        return $stmt->rowCount();
+    }
+
+    public function getApplicationsForCompany($company_id)
+    {
+        $stmt = $this->pdo->prepare("SELECT job_applications.*, jobs.title, users.name as seeker_name, users.email as seeker_email
+                                    FROM job_applications
+                                    JOIN jobs ON job_applications.job_id = jobs.id
+                                    JOIN users ON job_applications.user_id = users.id
+                                    WHERE jobs.company_id = ?
+                                    ORDER BY job_applications.applied_at DESC");
+        $stmt->execute([$company_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
