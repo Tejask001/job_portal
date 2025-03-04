@@ -13,6 +13,8 @@ require_once __DIR__ . '/../../controllers/UserController.php';
 $userController = new UserController($pdo);
 $applications = $userController->getApplicationsByUserId($_SESSION['user_id']);
 $notifications = $userController->getNotificationsByUserId($_SESSION['user_id']);
+require_once __DIR__ . '/../../models/Job.php';
+$jobModel = new Job($pdo);
 ?>
 
 <h1>Welcome, <?php echo html_escape($_SESSION['user_name']); ?>!</h1>
@@ -48,9 +50,20 @@ $notifications = $userController->getNotificationsByUserId($_SESSION['user_id'])
             <p>No new notifications.</p>
         <?php else: ?>
             <ul>
-                <?php foreach ($notifications as $notification): ?>
+                <?php foreach ($notifications as $notification):
+                    //Extract job id from the message
+                    preg_match('/job with ID (\d+)/', $notification['message'], $matches);
+                    $job_id = isset($matches[1]) ? $matches[1] : null;
+                    $job_title = '';
+                    if ($job_id) {
+                        $job = $jobModel->getJobById($job_id);
+                        if ($job) {
+                            $job_title = ' - ' . html_escape($job['title']);
+                        }
+                    }
+                ?>
                     <li>
-                        <?php echo html_escape($notification['message']); ?>
+                        <?php echo html_escape($notification['message']) . $job_title; ?>
                         <small> - <?php echo html_escape($notification['created_at']); ?></small>
                     </li>
                 <?php endforeach; ?>
