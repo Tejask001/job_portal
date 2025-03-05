@@ -99,9 +99,12 @@ class CompanyController
             // Get the application details to retrieve user_id
             $application = $this->applicationModel->getApplicationById($application_id);
 
+
             if ($application) {
                 $user_id = $application['user_id'];
                 $job_id = $application['job_id'];
+                $job = $this->jobModel->getJobById($job_id);
+                $job_title = $job['title'];
 
                 // Get The Job Model
                 $jobModel = new Job($this->pdo);
@@ -113,7 +116,7 @@ class CompanyController
                 }
 
                 // Create the notification message
-                $message = "Your application for the job with ID " . $job_id . " has been " . $status . ".";
+                $message = "Your application for the job titled " . $job_title . " has been " . $status . ".";
 
                 // Create notification for user in DB
                 $this->notificationModel->createNotification($user_id, $message);
