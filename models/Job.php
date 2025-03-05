@@ -97,4 +97,44 @@ class Job
         $stmt->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function filterJobs($postingTypes, $employmentTypes, $workTypes)
+    {
+        $whereClauses = [];
+        $params = [];
+
+        if (!empty($postingTypes)) {
+            $placeholders = implode(',', array_fill(0, count($postingTypes), '?'));
+            $whereClauses[] = "jobs.posting_type IN ($placeholders)";
+            $params = array_merge($params, $postingTypes);
+        }
+
+        if (!empty($employmentTypes)) {
+            $placeholders = implode(',', array_fill(0, count($employmentTypes), '?'));
+            $whereClauses[] = "jobs.employment_type IN ($placeholders)";
+            $params = array_merge($params, $employmentTypes);
+        }
+
+        if (!empty($workTypes)) {
+            $placeholders = implode(',', array_fill(0, count($workTypes), '?'));
+            $whereClauses[] = "jobs.work_type IN ($placeholders)";
+            $params = array_merge($params, $workTypes);
+        }
+
+        $sql = "SELECT jobs.*, companies.company_name, companies.company_logo
+                FROM jobs
+                JOIN companies ON jobs.company_id = companies.id
+                WHERE jobs.admin_approval = 1
+                  AND jobs.positions_filled < jobs.no_of_openings";
+
+        if (!empty($whereClauses)) {
+            $sql .= " AND " . implode(' AND ', $whereClauses);
+        }
+
+        $sql .= " ORDER BY jobs.created_at DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
