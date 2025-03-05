@@ -1,5 +1,7 @@
 <?php
-session_start(); // Make sure this is at the VERY top of the file!
+if (session_status() == PHP_SESSION_NONE) {
+    session_start(); // Start session only if it's not started
+}
 
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';

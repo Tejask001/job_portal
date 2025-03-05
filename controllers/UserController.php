@@ -1,5 +1,8 @@
 <?php
-// session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start(); // Start session only if it's not started
+}
+
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Resume.php';
@@ -140,7 +143,7 @@ class UserController
     public function saveJob($job_id, $user_id)
     {
         //global $pdo; //Remove the global variable. It is available in the class
-
+        var_dump("Job ID: " . $job_id . "User ID: " . $user_id);
         echo "saveJob called with job_id: " . html_escape($job_id) . " and user_id: " . html_escape($user_id) . "<br>"; // Debugging
         var_dump($this->pdo);  // Check PDO connection
 

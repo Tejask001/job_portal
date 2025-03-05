@@ -1,4 +1,9 @@
 <?php
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start(); // Start session only if it's not started
+}
+
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/Company.php';
 require_once __DIR__ . '/../models/Application.php';
