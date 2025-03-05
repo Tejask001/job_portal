@@ -13,7 +13,7 @@ if (!$job_id) {
 
 require_once __DIR__ . '/../../models/Job.php';
 $jobModel = new Job($pdo);
-$job = $jobModel->getJobById($job_id);
+$job = $jobModel->getJobByIdWithPositions($job_id);
 
 if (!$job) {
     $_SESSION['error_message'] = "Job not found.";
@@ -66,8 +66,10 @@ if ($is_seeker) {
         <a href="<?php echo generate_url('controllers/UserController.php?action=save_job&job_id=' . $job_id); ?>" class="btn">Save Job</a>
     <?php endif; ?>
 
-    <?php if (!$has_applied): ?>
-        <a href="<?php echo generate_url('views/jobs/apply.php?id=' . $job_id); ?>" class="btn">Apply Now</a>
+    <?php if ($job['positions_filled'] >= $job['no_of_openings']): ?>
+        <p>This job has been filled.</p>
+    <?php elseif (!$has_applied): ?>
+        <a href="<?php echo generate_url('views/jobs/apply.php?id=' . $job['id']); ?>" class="btn">Apply Now</a>
     <?php else: ?>
         <p>You have already applied for this job.</p>
     <?php endif; ?>

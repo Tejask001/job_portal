@@ -5,7 +5,6 @@ include __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../../models/Job.php';
 $jobModel = new Job($pdo);
 $jobs = $jobModel->getAllJobs(true); // Get only approved jobs
-
 ?>
 
 <h1>Job Listings</h1>

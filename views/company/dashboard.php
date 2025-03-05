@@ -43,6 +43,7 @@ $jobs = $jobController->getJobsByCompanyId($company['id']);
                 <th>Title</th>
                 <th>Posting Type</th>
                 <th>Created At</th>
+                <th>Admin Approval Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -52,6 +53,15 @@ $jobs = $jobController->getJobsByCompanyId($company['id']);
                     <td><?php echo html_escape($job['title']); ?></td>
                     <td><?php echo html_escape($job['posting_type']); ?></td>
                     <td><?php echo html_escape($job['created_at']); ?></td>
+                    <td>
+                        <?php
+                        if ($job['admin_approval'] == 1) {
+                            echo "Approved";
+                        } else {
+                            echo "Unapproved";
+                        }
+                        ?>
+                    </td>
                     <td>
                         <a href="<?php echo generate_url('views/company/edit_job.php?id=' . html_escape($job['id'])); ?>">Edit</a>
                         <a href="<?php echo generate_url('controllers/JobController.php?action=delete_job&id=' . html_escape($job['id'])); ?>" onclick="return confirm('Are you sure you want to delete this job?');">Delete</a>

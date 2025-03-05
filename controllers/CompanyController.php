@@ -96,32 +96,31 @@ class CompanyController
         $updated = $this->applicationModel->updateApplicationStatus($application_id, $status);
 
         if ($updated) {
-            // Get the application details to retrieve user_id and job_id
+            // Get the application details to retrieve user_id
             $application = $this->applicationModel->getApplicationById($application_id);
 
             if ($application) {
                 $user_id = $application['user_id'];
                 $job_id = $application['job_id'];
 
-                // Retrieve the Job title
-                $job = $this->jobModel->getJobById($job_id);
+                // Get The Job Model
+                $jobModel = new Job($this->pdo);
 
-                if ($job) {
-                    $job_title = $job['title'];
-                    // Create the notification message WITH the Job Title
-                    $message = "Your application for the job '" . html_escape($job_title) . "' has been " . $status . ".";
-
-                    // Create notification for user in DB
-                    $this->notificationModel->createNotification($user_id, $message);
-
-                    $_SESSION['success_message'] = "Application status updated successfully!";
-                } else {
-                    $_SESSION['error_message'] = "Application status updated successfully, however notification could not be created due to missing Job ID.";
+                //Increment the positions filled IFF its been approved, this may be prone to edge cases where the number of applications to the jobs is more. But let that not concern us right now
+                if ($status === 'approved') {
+                    //Update the Model in database
+                    $jobModel->incrementPositionsFilled($job_id);
                 }
 
-                redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/manage_applications.php');
+                // Create the notification message
+                $message = "Your application for the job with ID " . $job_id . " has been " . $status . ".";
+
+                // Create notification for user in DB
+                $this->notificationModel->createNotification($user_id, $message);
+
+                $_SESSION['success_message'] = "Application status updated successfully!";
             } else {
-                $_SESSION['error_message'] = "Application status updated successfully, however notification could not be created due to missing application ID.";
+                $_SESSION['error_message'] = "Application status updated successfully, however notification could not be created due to application ID";
             }
 
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/manage_applications.php');

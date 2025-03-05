@@ -21,12 +21,21 @@ class Job
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function getJobByIdWithPositions($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT jobs.*, companies.company_name, companies.company_logo
+                                      FROM jobs
+                                      JOIN companies ON jobs.company_id = companies.id
+                                      WHERE jobs.id = ? AND jobs.admin_approval = 1 AND jobs.positions_filled < jobs.no_of_openings");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function getAllJobs($approved_only = false)
     {
         $sql = "SELECT jobs.*, companies.company_name, companies.company_logo FROM jobs JOIN companies ON jobs.company_id = companies.id";
         if ($approved_only) {
-            $sql .= " WHERE admin_approval = 1";
+            $sql .= " WHERE admin_approval = 1 AND jobs.positions_filled < jobs.no_of_openings";
         }
         $sql .= " ORDER BY jobs.created_at DESC";
         $stmt = $this->pdo->prepare($sql);
@@ -65,6 +74,13 @@ class Job
     public function unapproveJob($job_id)
     {
         $stmt = $this->pdo->prepare("UPDATE jobs SET admin_approval = 0 WHERE id = ?");
+        $stmt->execute([$job_id]);
+        return $stmt->rowCount();
+    }
+
+    public function incrementPositionsFilled($job_id)
+    {
+        $stmt = $this->pdo->prepare("UPDATE jobs SET positions_filled = positions_filled + 1 WHERE id = ?");
         $stmt->execute([$job_id]);
         return $stmt->rowCount();
     }
