@@ -137,7 +137,7 @@ class JobController
                     break;
                 case 'update_job':
                     $this->updateJob(
-                        $_POST['id'] ?? '',
+                        $_GET['id'] ?? '',
                         $_POST['title'] ?? '',
                         $_POST['description'] ?? '',
                         $_POST['posting_type'] ?? '',
