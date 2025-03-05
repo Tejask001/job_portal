@@ -83,6 +83,11 @@ if ($job['company_id'] !== $company['id']) {
     </div>
 
     <div class="form-group">
+        <label for="job_location">Job Location:</label>
+        <input type="text" id="job_location" name="job_location" value="<?php echo html_escape($job['job_location']); ?>" required placeholder="e.g., City, State">
+    </div>
+
+    <div class="form-group">
         <label for="no_of_openings">Number of Openings:</label>
         <input type="number" id="no_of_openings" name="no_of_openings" value="<?php echo html_escape($job['no_of_openings']); ?>" required>
     </div>

@@ -20,15 +20,15 @@ class JobController
         $this->pdo = $pdo;
     }
 
-    public function postJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function postJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
     {
-        if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
+        if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($job_location) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
             $_SESSION['error_message'] = "All fields are required.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/post_job.php');
             return;
         }
 
-        $job_id = $this->jobModel->createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
+        $job_id = $this->jobModel->createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
 
         if ($job_id) {
             $_SESSION['success_message'] = "Job posted successfully! Waiting for admin approval.";
@@ -39,15 +39,15 @@ class JobController
         }
     }
 
-    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
     {
-        if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
+        if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($job_location) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
             $_SESSION['error_message'] = "All fields are required.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/edit_job.php?id=' . $id);
             return;
         }
 
-        $updated = $this->jobModel->updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
+        $updated = $this->jobModel->updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
 
         if ($updated) {
             $_SESSION['success_message'] = "Job updated successfully!";
@@ -129,6 +129,7 @@ class JobController
                         $_POST['employment_type'] ?? '',
                         $_POST['work_type'] ?? '',
                         $_POST['skills'] ?? '',
+                        $_POST['job_location'] ?? '',
                         $_POST['no_of_openings'] ?? '',
                         $_POST['start_date'] ?? '',
                         $_POST['duration'] ?? '',
@@ -146,6 +147,7 @@ class JobController
                         $_POST['employment_type'] ?? '',
                         $_POST['work_type'] ?? '',
                         $_POST['skills'] ?? '',
+                        $_POST['job_location'] ?? '',
                         $_POST['no_of_openings'] ?? '',
                         $_POST['start_date'] ?? '',
                         $_POST['duration'] ?? '',

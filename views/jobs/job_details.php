@@ -53,6 +53,7 @@ if ($is_seeker) {
 <p><strong>Posting Type:</strong> <?php echo html_escape($job['posting_type']); ?></p>
 <p><strong>Employment Type:</strong> <?php echo html_escape($job['employment_type']); ?></p>
 <p><strong>Work Type:</strong> <?php echo html_escape($job['work_type']); ?></p>
+<p><strong>Job Location:</strong> <?php echo html_escape($job['job_location']); ?></p>
 <p><strong>Skills Required:</strong> <?php echo html_escape($job['skills']); ?></p>
 <p><strong>Number of Openings:</strong> <?php echo html_escape($job['no_of_openings']); ?></p>
 <p><strong>Start Date:</strong> <?php echo html_escape($job['start_date']); ?></p>
