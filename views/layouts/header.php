@@ -23,6 +23,7 @@ function generate_url($path)
     <nav>
         <ul>
             <li><a href="<?php echo generate_url('index.php'); ?>">Home</a></li>
+            <li><a href="<?php echo generate_url('views/jobs/job_listing.php'); ?>">Jobs</a></li>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <!-- Logged in -->
                 <?php if ($_SESSION['user_type'] == 'admin'): ?>

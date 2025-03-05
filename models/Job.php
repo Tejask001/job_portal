@@ -76,4 +76,25 @@ class Job
         $stmt->execute([$job_id]);
         return $stmt->rowCount();
     }
+
+    public function searchJobs($searchTerm)
+    {
+        $searchTerm = '%' . $searchTerm . '%'; // Add wildcards for "LIKE" search
+        $sql = "SELECT jobs.*, companies.company_name, companies.company_logo
+                FROM jobs
+                JOIN companies ON jobs.company_id = companies.id
+                WHERE jobs.admin_approval = 1
+                  AND jobs.positions_filled < jobs.no_of_openings
+                  AND (
+                    jobs.title LIKE ?
+                    OR jobs.skills LIKE ?
+                    OR jobs.job_location LIKE ?
+                    OR companies.company_name LIKE ?
+                  )
+                ORDER BY jobs.created_at DESC";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
