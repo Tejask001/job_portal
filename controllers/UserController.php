@@ -220,6 +220,33 @@ class UserController
         return $this->applicationModel->getApplicationsByUserId($user_id);
     }
 
+    public function withdrawApplication($application_id)
+    {
+        // Verify that the application exists and belongs to the user
+        $application = $this->applicationModel->getApplicationById($application_id);
+
+        if (!$application) {
+            $_SESSION['error_message'] = "Application not found.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/dashboard.php');
+            return;
+        }
+
+        if ($application['user_id'] != $_SESSION['user_id']) {
+            $_SESSION['error_message'] = "You are not authorized to delete this application.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/dashboard.php');
+            return;
+        }
+
+        $deleted = $this->applicationModel->deleteApplication($application_id);
+
+        if ($deleted) {
+            $_SESSION['success_message'] = "Application deleted successfully!";
+        } else {
+            $_SESSION['error_message'] = "Failed to delete application.";
+        }
+        redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/dashboard.php');
+    }
+
     public function getNotificationsByUserId($user_id)
     {
         return $this->notificationModel->getNotificationsByUserId($user_id);
@@ -256,6 +283,8 @@ class UserController
                 case 'unsave_job':
                     $this->unsaveJob($_GET['job_id'] ?? '', $_SESSION['user_id'] ?? '');
                     break;
+                case 'withdraw_application':
+                    $this->withdrawApplication($_GET['id'] ?? '');
                 default:
                     // Invalid action
                     echo "Invalid action."; //Or redirect to homepage

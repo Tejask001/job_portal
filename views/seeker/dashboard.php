@@ -47,6 +47,7 @@ $jobModel = new Job($pdo);
                         <?php else: ?>
                             - Status: Pending
                         <?php endif; ?>
+                        <a href="<?php echo generate_url('controllers/UserController.php?action=withdraw_application&id=' . html_escape($application['id'])); ?>" onclick="return confirm('Are you sure you want to delete this application?');">Withdraw</a>
                     </li>
                 <?php endforeach; ?>
             </ul>
