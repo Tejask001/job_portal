@@ -13,7 +13,7 @@ if (!$job_id) {
 
 require_once __DIR__ . '/../../models/Job.php';
 $jobModel = new Job($pdo);
-$job = $jobModel->getJobByIdWithPositions($job_id);
+$job = $jobModel->getJobById($job_id);
 
 if (!$job) {
     $_SESSION['error_message'] = "Job not found.";
