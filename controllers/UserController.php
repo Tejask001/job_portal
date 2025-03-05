@@ -148,7 +148,6 @@ class UserController
             echo "Preparing SQL statement...<br>"; // Debugging
             $stmt = $this->pdo->prepare("INSERT INTO saved_jobs (job_id, user_id) VALUES (?, ?)");
             echo "SQL statement prepared successfully.<br>"; // Debugging
-            echo "Executing SQL statement...<br>"; // Debugging
             $stmt->execute([$job_id, $user_id]);
             echo "SQL statement executed successfully.<br>"; // Debugging
 

@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/Job.php';
 require_once __DIR__ . '/../models/Application.php';

@@ -27,11 +27,19 @@ $jobModel = new Job($pdo);
             <p>You have not applied for any jobs yet.</p>
         <?php else: ?>
             <ul>
-                <?php foreach ($applications as $application): ?>
+                <?php foreach ($applications as $application):
+                    //Get the Job to render the details of the application
+                    $job = $jobModel->getJobById($application['job_id']);
+                ?>
                     <li>
-                        <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>">
-                            <?php echo html_escape($application['title']); ?>
-                        </a> - Applied on: <?php echo html_escape($application['applied_at']); ?>
+                        <?php if (is_array($job) && isset($job['title'])): ?>
+                            <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>">
+                                <?php echo html_escape($job['title']); ?>
+                            </a>
+                        <?php else: ?>
+                            Job Titled <?php echo  html_escape($application['title']); ?> is unavailabe
+                        <?php endif; ?>
+                        - Applied on: <?php echo html_escape($application['applied_at']); ?>
                         <?php if ($application['application_status'] == 'approved'): ?>
                             - Status: Approved
                         <?php elseif ($application['application_status'] == 'rejected'): ?>
@@ -50,20 +58,9 @@ $jobModel = new Job($pdo);
             <p>No new notifications.</p>
         <?php else: ?>
             <ul>
-                <?php foreach ($notifications as $notification):
-                    //Extract job id from the message
-                    preg_match('/job with ID (\d+)/', $notification['message'], $matches);
-                    $job_id = isset($matches[1]) ? $matches[1] : null;
-                    $job_title = '';
-                    if ($job_id) {
-                        $job = $jobModel->getJobById($job_id);
-                        if ($job) {
-                            $job_title = ' - ' . html_escape($job['title']);
-                        }
-                    }
-                ?>
+                <?php foreach ($notifications as $notification): ?>
                     <li>
-                        <?php echo html_escape($notification['message']) . $job_title; ?>
+                        <?php echo html_escape($notification['message']); ?>
                         <small> - <?php echo html_escape($notification['created_at']); ?></small>
                     </li>
                 <?php endforeach; ?>
