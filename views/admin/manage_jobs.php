@@ -44,6 +44,7 @@ $jobs = $adminController->getAllJobs();
                 </td>
                 <td><?php echo html_escape($job['created_at']); ?></td>
                 <td>
+                    <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>" class="btn btn-view">View Details</a>
                     <?php if (!$job['admin_approval']): ?>
                         <a href="<?php echo generate_url('controllers/AdminController.php?action=approve_job&id=' . html_escape($job['id'])); ?>" class="btn btn-approve">Approve</a>
                     <?php else: ?>

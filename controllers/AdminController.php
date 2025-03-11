@@ -5,18 +5,21 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Job.php';
+require_once __DIR__ . '/../models/Company.php'; // Add this line!
 require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class AdminController
 {
     private $userModel;
     private $jobModel;
+    private $companyModel;
     private $pdo;
 
     public function __construct($pdo)
     {
         $this->userModel = new User($pdo);
         $this->jobModel = new Job($pdo);
+        $this->companyModel = new Company($pdo);
         $this->pdo = $pdo;
     }
 
@@ -65,6 +68,17 @@ class AdminController
     {
         return $this->jobModel->getAllJobs();
     }
+
+    public function getCompanyDetailsById($company_id)
+    {
+        return $this->companyModel->getCompanyByUserId($company_id);
+    }
+
+    public function getUserDetails($user_id)
+    {
+        return $this->userModel->getUserById($user_id);
+    }
+
 
     public function handleRequest()
     {

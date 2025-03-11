@@ -36,6 +36,7 @@ $users = $adminController->getAllUsers();
                 <td><?php echo html_escape($user['email']); ?></td>
                 <td><?php echo html_escape($user['created_at']); ?></td>
                 <td>
+                    <a href="<?php echo generate_url('views/admin/view_user_details.php?id=' . html_escape($user['id']) . '&user_type=' . html_escape($user['user_type'])); ?>" class="btn">View Details</a>
                     <?php if ($user['user_type'] !== 'admin'): ?>
                         <a href="<?php echo generate_url('controllers/AdminController.php?action=delete_user&id=' . html_escape($user['id'])); ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
                     <?php endif; ?>
