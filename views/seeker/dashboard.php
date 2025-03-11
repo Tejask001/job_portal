@@ -25,7 +25,7 @@ $jobModel = new Job($pdo);
 
     <div class="row">
         <!-- My Applications Section -->
-        <div class="col-lg-4 col-md-6 mb-4">
+        <div class="col-lg-5 col-md-6 mb-4">
             <div class="card shadow-lg border-0">
                 <div class="card-body">
                     <h5 class="card-title fw-bold text-primary">My Applications</h5>
@@ -40,9 +40,11 @@ $jobModel = new Job($pdo);
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <?php if (is_array($job) && isset($job['title'])): ?>
-                                            <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>" class="fw-semibold text-dark">
+                                            <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>"
+                                                class="fw-semibold text-dark text-decoration-none job-title-hover">
                                                 <?php echo html_escape($job['title']); ?>
                                             </a>
+
                                         <?php else: ?>
                                             <span class="text-danger">Job Unavailable</span>
                                         <?php endif; ?>
@@ -90,7 +92,7 @@ $jobModel = new Job($pdo);
         </div>
 
         <!-- Quick Actions Section -->
-        <div class="col-lg-4 col-md-12 mb-4">
+        <div class="col-lg-3 col-md-12 mb-4">
             <div class="card shadow-lg border-0">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title fw-bold text-success">Quick Actions</h5>

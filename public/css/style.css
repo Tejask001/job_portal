@@ -193,3 +193,10 @@ nav a:hover {
     cursor: pointer;
     border-radius: 4px;
 }
+
+/* user dashboard styling */
+.job-title-hover:hover {
+    color: #007bff !important;
+    /* Bootstrap primary color */
+    cursor: pointer;
+}

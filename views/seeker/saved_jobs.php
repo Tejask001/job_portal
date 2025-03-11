@@ -22,7 +22,7 @@ $savedJobs = $userController->getSavedJobsByUserId($_SESSION['user_id']);
     <?php else: ?>
         <div class="row">
             <?php foreach ($savedJobs as $job): ?>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-3 mb-4">
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo html_escape($job['title']); ?></h5>

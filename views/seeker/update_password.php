@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'seeker') {
 $user_id = $_SESSION['user_id'];
 ?>
 
-<div class="container mt-4">
+<div class="container mt-4 w-50">
     <div class="card">
         <div class="card-body">
             <h1 class="card-title">Update Your Password</h1>
