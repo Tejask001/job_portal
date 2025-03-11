@@ -54,7 +54,7 @@ if (!$user) {
             <p><strong>Why are you a fit:</strong> <?php echo html_escape($application['why_are_you_fit']); ?></p>
 
             <?php if ($application['resume_path']): ?>
-                <p><strong>Resume:</strong> <a href="<?php echo html_escape($application['resume_path']); ?>" target="_blank">View Resume</a></p>
+                <p><strong>Resume:</strong> <a href="<?php echo generate_url($application['resume_path']); ?>" target="_blank">View Resume</a></p>
             <?php else: ?>
                 <p><strong>Resume:</strong> No resume provided.</p>
             <?php endif; ?>
