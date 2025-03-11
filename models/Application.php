@@ -37,6 +37,17 @@ class Application
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getAllJobApplications()
+    {
+        $stmt = $this->pdo->prepare("SELECT job_applications.*, jobs.title, users.name as seeker_name, users.email as seeker_email
+                                    FROM job_applications
+                                    JOIN jobs ON job_applications.job_id = jobs.id
+                                    JOIN users ON job_applications.user_id = users.id
+                                    ORDER BY job_applications.applied_at DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function deleteApplication($id)
     {
         $stmt = $this->pdo->prepare("DELETE FROM job_applications WHERE id = ?");

@@ -5,7 +5,9 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/database.php'; // Include database connection
 require_once __DIR__ . '/../models/User.php';
 require_once __DIR__ . '/../models/Job.php';
-require_once __DIR__ . '/../models/Company.php'; // Add this line!
+require_once __DIR__ . '/../models/Company.php';
+require_once __DIR__ . '/../models/Application.php'; // Include the Application model
+require_once __DIR__ . '/../models/Notification.php'; // Include the Application model
 require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class AdminController
@@ -13,6 +15,8 @@ class AdminController
     private $userModel;
     private $jobModel;
     private $companyModel;
+    private $applicationModel; // Add this line!
+    private $notificationModel;
     private $pdo;
 
     public function __construct($pdo)
@@ -20,6 +24,8 @@ class AdminController
         $this->userModel = new User($pdo);
         $this->jobModel = new Job($pdo);
         $this->companyModel = new Company($pdo);
+        $this->applicationModel = new Application($pdo); // Initialize the Application
+        $this->notificationModel = new Notification($pdo);
         $this->pdo = $pdo;
     }
 
@@ -69,6 +75,53 @@ class AdminController
         return $this->jobModel->getAllJobs();
     }
 
+    // Retrieve all Job Applications
+    public function getAllJobApplications()
+    {
+        return $this->applicationModel->getAllJobApplications();
+    }
+
+    // Update status of Job application
+    public function updateApplicationStatus($application_id, $status)
+    {
+        $updated = $this->applicationModel->updateApplicationStatus($application_id, $status);
+
+        if ($updated) {
+            $application = $this->applicationModel->getApplicationById($application_id);
+
+            if ($application) {
+                $user_id = $application['user_id'];
+                $job_id = $application['job_id'];
+                $job = $this->jobModel->getJobById($job_id);
+                $job_title = $job['title'];
+
+                // Get The Job Model
+                $jobModel = new Job($this->pdo);
+
+                //Increment the positions filled IFF its been approved, this may be prone to edge cases where the number of applications to the jobs is more. But let that not concern us right now
+                if ($status === 'approved') {
+                    //Update the Model in database
+                    $jobModel->incrementPositionsFilled($job_id);
+                }
+
+                // Create the notification message
+                $message = "Your application for the job titled " . $job_title . " has been " . $status . ".";
+
+                // Create notification for user in DB
+                $this->notificationModel->createNotification($user_id, $message);
+
+                $_SESSION['success_message'] = "Application status updated successfully!";
+            } else {
+                $_SESSION['error_message'] = "Application status updated successfully, however notification could not be created due to application ID";
+            }
+
+            $_SESSION['success_message'] = "Application status updated successfully!";
+        } else {
+            $_SESSION['error_message'] = "Application status update failed. Please try again.";
+        }
+        redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/admin/manage_applications.php');
+    }
+
     public function getCompanyDetailsById($company_id)
     {
         return $this->companyModel->getCompanyByUserId($company_id);
@@ -79,7 +132,7 @@ class AdminController
         return $this->userModel->getUserById($user_id);
     }
 
-
+    // Add new cases to the switch statement inside the handleRequest function
     public function handleRequest()
     {
         if (isset($_GET['action'])) {
@@ -94,6 +147,12 @@ class AdminController
                     break;
                 case 'unapprove_job':
                     $this->unapproveJob($_GET['id'] ?? '');
+                    break;
+                case 'update_application_status':
+                    $this->updateApplicationStatus(
+                        $_GET['application_id'] ?? '',
+                        $_GET['status'] ?? ''
+                    );
                     break;
                 default:
                     echo "Invalid action.";
