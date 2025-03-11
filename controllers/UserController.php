@@ -30,7 +30,7 @@ class UserController
         $this->pdo = $pdo;
     }
 
-    public function updateUserProfile($id, $name, $email)
+    public function updateUserProfile($id, $name, $email, $age = null, $gender = null, $experience = null)
     {
         // Validate input
         if (empty($name) || empty($email)) {
@@ -39,14 +39,20 @@ class UserController
             return;
         }
 
-        $updated = $this->userModel->updateUserProfile($id, $name, $email);
+        try {
+            $updated = $this->userModel->updateUserProfile($id, $name, $email, $age, $gender, $experience);
 
-        if ($updated) {
-            $_SESSION['success_message'] = "Profile updated successfully!";
-            $_SESSION['user_name'] = $name; // Update the session name as well
-            redirect('/job_portal/views/seeker/profile.php');
-        } else {
-            $_SESSION['error_message'] = "Profile update failed. Please try again.";
+            if ($updated) {
+                $_SESSION['success_message'] = "Profile updated successfully!";
+                $_SESSION['user_name'] = $name; // Update the session name as well
+                redirect('/job_portal/views/seeker/profile.php');
+            } else {
+                $_SESSION['error_message'] = "Profile update failed. Please try again.";
+                redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/profile.php');
+            }
+        } catch (PDOException $e) {
+            $_SESSION['error_message'] = "Profile update failed due to database error: " . $e->getMessage();
+            error_log("Error updating profile: " . $e->getMessage());
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/profile.php');
         }
     }
@@ -124,7 +130,7 @@ class UserController
             return;
         }
 
-        $file_path = __DIR__ . '/../' . $resume['resume_path'];
+        $file_path = __DIR__ . '/../public/' . $resume['resume_path'];
 
         $deleted = $this->resumeModel->deleteResume($id);
 
@@ -142,39 +148,23 @@ class UserController
     // Saved Jobs Functions
     public function saveJob($job_id, $user_id)
     {
-        //global $pdo; //Remove the global variable. It is available in the class
-        var_dump("Job ID: " . $job_id . "User ID: " . $user_id);
-        echo "saveJob called with job_id: " . html_escape($job_id) . " and user_id: " . html_escape($user_id) . "<br>"; // Debugging
-        var_dump($this->pdo);  // Check PDO connection
-
         try {
-            echo "Preparing SQL statement...<br>"; // Debugging
             $stmt = $this->pdo->prepare("INSERT INTO saved_jobs (job_id, user_id) VALUES (?, ?)");
-            echo "SQL statement prepared successfully.<br>"; // Debugging
             $stmt->execute([$job_id, $user_id]);
-            echo "SQL statement executed successfully.<br>"; // Debugging
-
             $_SESSION['success_message'] = "Job saved successfully!";
-            echo "Success message set.<br>"; // Debugging
         } catch (PDOException $e) {
             $_SESSION['error_message'] = "Failed to save job: " . $e->getMessage();
             error_log("Error saving job: " . $e->getMessage()); // Log the error
-
-            // Display the error message for debugging
-            echo "Database Error: " . $e->getMessage() . "<br>";
         }
 
-        echo "Before redirect... HTTP_REFERER is: " . ($_SERVER['HTTP_REFERER'] ?? 'Not Set') . "<br>";
         redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/jobs/job_details.php?id=' . $job_id); // Redirect back to job details page
-        echo "After redirect (this should not be displayed).<br>"; //Debug
-
     }
 
     public function unsaveJob($job_id, $user_id)
     {
-        global $pdo;
+
         try {
-            $stmt = $pdo->prepare("DELETE FROM saved_jobs WHERE job_id = ? AND user_id = ?");
+            $stmt = $this->pdo->prepare("DELETE FROM saved_jobs WHERE job_id = ? AND user_id = ?");
             $stmt->execute([$job_id, $user_id]);
             $_SESSION['success_message'] = "Job unsaved successfully!";
         } catch (PDOException $e) {
@@ -185,9 +175,9 @@ class UserController
 
     public function getSavedJobsByUserId($user_id)
     {
-        global $pdo;
+
         try {
-            $stmt = $pdo->prepare("SELECT jobs.*, companies.company_name
+            $stmt = $this->pdo->prepare("SELECT jobs.*, companies.company_name
                                     FROM saved_jobs
                                     JOIN jobs ON saved_jobs.job_id = jobs.id
                                     JOIN companies ON jobs.company_id = companies.id
@@ -203,9 +193,8 @@ class UserController
 
     public function isJobSaved($job_id, $user_id)
     {
-        global $pdo;
         try {
-            $stmt = $pdo->prepare("SELECT COUNT(*) FROM saved_jobs WHERE job_id = ? AND user_id = ?");
+            $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM saved_jobs WHERE job_id = ? AND user_id = ?");
             $stmt->execute([$job_id, $user_id]);
             $count = $stmt->fetchColumn();
             return $count > 0;
@@ -260,11 +249,14 @@ class UserController
 
             switch ($action) {
                 case 'update_profile':
-                    //Call the updateUserProfile function
+                    //Call the updateUserProfile function with all parameters
                     $this->updateUserProfile(
                         $_POST['id'] ?? '',
                         $_POST['name'] ?? '',
-                        $_POST['email'] ?? ''
+                        $_POST['email'] ?? '',
+                        $_POST['age'] ?? null,
+                        $_POST['gender'] ?? null,
+                        $_POST['experience'] ?? null
                     );
                     break;
                 case 'upload_resume':

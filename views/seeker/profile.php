@@ -15,6 +15,12 @@ $user_id = $_SESSION['user_id'];
 
 $resumes = $userController->getResumesByUserId($user_id);
 $user = (new User($pdo))->getUserById($user_id);
+
+if (!$user) {
+    $_SESSION['error_message'] = "User not found.";
+    redirect(generate_url('views/seeker/dashboard.php'));
+    exit();
+}
 ?>
 
 <h1>Update Your Profile</h1>
@@ -29,6 +35,28 @@ $user = (new User($pdo))->getUserById($user_id);
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" value="<?php echo html_escape($user['email']); ?>" required>
     </div>
+
+    <!-- Seeker-Specific Fields -->
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" value="<?php echo html_escape($user['age'] ?? ''); ?>" placeholder="Enter your age">
+    </div>
+
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender">
+            <option value="" <?php if (empty($user['gender'])) echo 'selected'; ?>>Select Gender</option>
+            <option value="male" <?php if ($user['gender'] === 'male') echo 'selected'; ?>>Male</option>
+            <option value="female" <?php if ($user['gender'] === 'female') echo 'selected'; ?>>Female</option>
+            <option value="other" <?php if ($user['gender'] === 'other') echo 'selected'; ?>>Other</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="experience">Experience:</label>
+        <input type="text" id="experience" name="experience" value="<?php echo html_escape($user['experience'] ?? ''); ?>" placeholder="e.g., 2+ years, Entry Level">
+    </div>
+
     <button type="submit" class="btn">Update Profile</button>
 </form>
 

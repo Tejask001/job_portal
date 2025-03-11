@@ -31,11 +31,16 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUserProfile($id, $name, $email)
+    public function updateUserProfile($id, $name, $email, $age = null, $gender = null, $experience = null)
     {
-        $stmt = $this->pdo->prepare("UPDATE users SET name = ?, email = ? WHERE id = ?");
-        $stmt->execute([$name, $email, $id]);
-        return $stmt->rowCount(); // Returns the number of affected rows (1 for success, 0 for failure)
+        try {
+            $stmt = $this->pdo->prepare("UPDATE users SET name = ?, email = ?, age = ?, gender = ?, experience = ? WHERE id = ?");
+            $stmt->execute([$name, $email, $age, $gender, $experience, $id]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Error updating user: " . $e->getMessage()); // Log the error
+            return false;
+        }
     }
 
     public function getAllUsers()
