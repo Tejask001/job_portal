@@ -25,38 +25,42 @@ $companyController = new CompanyController($pdo);
 $applications = $companyController->getJobApplications($company['id']);
 ?>
 
-<h1>Manage Job Applications</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Manage Job Applications</h1>
 
-<?php if (empty($applications)): ?>
-    <p>No applications received yet.</p>
-<?php else: ?>
-    <table class="admin-dashboard">
-        <thead>
-            <tr>
-                <th>Applicant Name</th>
-                <th>Job Title</th>
-                <th>Applied At</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($applications as $application): ?>
-                <tr>
-                    <td><?php echo html_escape($application['seeker_name']); ?></td>
-                    <td><?php echo html_escape($application['title']); ?></td>
-                    <td><?php echo html_escape($application['applied_at']); ?></td>
-                    <td><?php echo html_escape($application['application_status']); ?></td>
-                    <td>
-                        <?php if ($application['application_status'] === 'pending'): ?>
-                            <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=approved'); ?>">Approve</a>
-                            <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=rejected'); ?>">Reject</a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+    <?php if (empty($applications)): ?>
+        <p class="alert alert-info">No applications received yet.</p>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Applicant Name</th>
+                        <th>Job Title</th>
+                        <th>Applied At</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($applications as $application): ?>
+                        <tr>
+                            <td><?php echo html_escape($application['seeker_name']); ?></td>
+                            <td><?php echo html_escape($application['title']); ?></td>
+                            <td><?php echo html_escape($application['applied_at']); ?></td>
+                            <td><?php echo html_escape($application['application_status']); ?></td>
+                            <td>
+                                <?php if ($application['application_status'] === 'pending'): ?>
+                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=approved'); ?>" class="btn btn-success btn-sm">Approve</a>
+                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=rejected'); ?>" class="btn btn-danger btn-sm">Reject</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

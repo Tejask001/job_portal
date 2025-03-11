@@ -14,36 +14,42 @@ $adminController = new AdminController($pdo);
 $users = $adminController->getAllUsers();
 ?>
 
-<h1>Manage Users</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Manage Users</h1>
 
-<table class="admin-dashboard">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>User Type</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($users as $user): ?>
-            <tr>
-                <td><?php echo html_escape($user['id']); ?></td>
-                <td><?php echo html_escape($user['user_type']); ?></td>
-                <td><?php echo html_escape($user['name']); ?></td>
-                <td><?php echo html_escape($user['email']); ?></td>
-                <td><?php echo html_escape($user['created_at']); ?></td>
-                <td>
-                    <a href="<?php echo generate_url('views/admin/view_user_details.php?id=' . html_escape($user['id']) . '&user_type=' . html_escape($user['user_type'])); ?>" class="btn">View Details</a>
-                    <?php if ($user['user_type'] !== 'admin'): ?>
-                        <a href="<?php echo generate_url('controllers/AdminController.php?action=delete_user&id=' . html_escape($user['id'])); ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($users as $user): ?>
+                    <tr>
+                        <td><?php echo html_escape($user['id']); ?></td>
+                        <td><?php echo html_escape($user['user_type']); ?></td>
+                        <td><?php echo html_escape($user['name']); ?></td>
+                        <td><?php echo html_escape($user['email']); ?></td>
+                        <td><?php echo html_escape($user['created_at']); ?></td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="<?php echo generate_url('views/admin/view_user_details.php?id=' . html_escape($user['id']) . '&user_type=' . html_escape($user['user_type'])); ?>" class="btn btn-sm btn-info text-white">View Details</a>
+                                <?php if ($user['user_type'] !== 'admin'): ?>
+                                    <a href="<?php echo generate_url('controllers/AdminController.php?action=delete_user&id=' . html_escape($user['id'])); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

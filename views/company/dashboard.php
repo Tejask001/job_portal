@@ -25,52 +25,57 @@ $jobController = new JobController($pdo);
 $jobs = $jobController->getJobsByCompanyId($company['id']);
 ?>
 
-<h1>Company Dashboard</h1>
-<p>Manage your job postings here.</p>
+<div class="container mt-4">
+    <h1 class="mb-4">Company Dashboard</h1>
+    <p>Manage your job postings here.</p>
 
-<a href="<?php echo generate_url('views/company/post_job.php'); ?>" class="btn">Post a New Job</a>
-<a href="<?php echo generate_url('views/company/company_profile.php'); ?>" class="btn">Edit Company Profile</a>
-<a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn">Manage Applications</a>
+    <div class="mb-3">
+        <a href="<?php echo generate_url('views/company/post_job.php'); ?>" class="btn btn-primary">Post a New Job</a>
+        <a href="<?php echo generate_url('views/company/company_profile.php'); ?>" class="btn btn-secondary">Edit Company Profile</a>
+        <a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn btn-info text-white">Manage Applications</a>
+    </div>
 
-<h2>My Job Postings</h2>
+    <h2>My Job Postings</h2>
 
-<?php if (empty($jobs)): ?>
-    <p>You have not posted any jobs yet.</p>
-<?php else: ?>
-    <table class="admin-dashboard">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Posting Type</th>
-                <th>Created At</th>
-                <th>Admin Approval Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($jobs as $job): ?>
-                <tr>
-                    <td><?php echo html_escape($job['title']); ?></td>
-                    <td><?php echo html_escape($job['posting_type']); ?></td>
-                    <td><?php echo html_escape($job['created_at']); ?></td>
-                    <td>
-                        <?php
-                        if ($job['admin_approval'] == 1) {
-                            echo "Approved";
-                        } else {
-                            echo "Unapproved";
-                        }
-                        ?>
-                    </td>
-                    <td>
-                        <a href="<?php echo generate_url('views/company/edit_job.php?id=' . html_escape($job['id'])); ?>">Edit</a>
-                        <a href="<?php echo generate_url('controllers/JobController.php?action=delete_job&id=' . html_escape($job['id'])); ?>" onclick="return confirm('Are you sure you want to delete this job?');">Delete</a>
-
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+    <?php if (empty($jobs)): ?>
+        <p class="alert alert-info">You have not posted any jobs yet.</p>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Posting Type</th>
+                        <th>Created At</th>
+                        <th>Admin Approval Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($jobs as $job): ?>
+                        <tr>
+                            <td><?php echo html_escape($job['title']); ?></td>
+                            <td><?php echo html_escape($job['posting_type']); ?></td>
+                            <td><?php echo html_escape($job['created_at']); ?></td>
+                            <td>
+                                <?php
+                                if ($job['admin_approval'] == 1) {
+                                    echo '<span class="badge bg-success">Approved</span>';
+                                } else {
+                                    echo '<span class="badge bg-warning text-dark">Unapproved</span>';
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <a href="<?php echo generate_url('views/company/edit_job.php?id=' . html_escape($job['id'])); ?>" class="btn btn-sm btn-primary">Edit</a>
+                                <a href="<?php echo generate_url('controllers/JobController.php?action=delete_job&id=' . html_escape($job['id'])); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this job?');">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

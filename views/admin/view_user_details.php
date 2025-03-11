@@ -35,65 +35,78 @@ if ($user['user_type'] === 'company') {
 }
 ?>
 
-<h1>User Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">User Details</h1>
 
-<dl>
-    <dt>ID:</dt>
-    <dd><?php echo html_escape($user['id']); ?></dd>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">User Information</h5>
+            <dl class="row">
+                <dt class="col-sm-3">ID:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['id']); ?></dd>
 
-    <dt>User Type:</dt>
-    <dd><?php echo html_escape($user['user_type']); ?></dd>
+                <dt class="col-sm-3">User Type:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['user_type']); ?></dd>
 
-    <dt>Name:</dt>
-    <dd><?php echo html_escape($user['name']); ?></dd>
+                <dt class="col-sm-3">Name:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['name']); ?></dd>
 
-    <dt>Email:</dt>
-    <dd><?php echo html_escape($user['email']); ?></dd>
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['email']); ?></dd>
 
-    <?php if ($user['user_type'] === 'seeker'): ?>
-        <dt>Age:</dt>
-        <dd><?php echo html_escape($user['age'] ?? 'N/A'); ?></dd>
+                <?php if ($user['user_type'] === 'seeker'): ?>
+                    <dt class="col-sm-3">Age:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['age'] ?? 'N/A'); ?></dd>
 
-        <dt>Gender:</dt>
-        <dd><?php echo html_escape($user['gender'] ?? 'N/A'); ?></dd>
+                    <dt class="col-sm-3">Gender:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['gender'] ?? 'N/A'); ?></dd>
 
-        <dt>Experience:</dt>
-        <dd><?php echo html_escape($user['experience'] ?? 'N/A'); ?></dd>
+                    <dt class="col-sm-3">Experience:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['experience'] ?? 'N/A'); ?></dd>
+                <?php endif; ?>
+
+                <dt class="col-sm-3">Created At:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['created_at']); ?></dd>
+
+                <dt class="col-sm-3">Updated At:</dt>
+                <dd class="col-sm-9"><?php echo html_escape($user['updated_at']); ?></dd>
+            </dl>
+        </div>
+    </div>
+
+    <?php if ($company): ?>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Company Details</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">Company Name:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['company_name']); ?></dd>
+
+                    <dt class="col-sm-3">Company Logo:</dt>
+                    <dd class="col-sm-9">
+                        <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" class="img-fluid" style="max-width: 100px;">
+                    </dd>
+
+                    <dt class="col-sm-3">Company Description:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['company_description']); ?></dd>
+
+                    <dt class="col-sm-3">Industry:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['industry'] ?? 'N/A'); ?></dd>
+
+                    <dt class="col-sm-3">Employee Count:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['employee_count'] ?? 'N/A'); ?></dd>
+
+                    <dt class="col-sm-3">Website Link:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['website_link'] ?? 'N/A'); ?></dd>
+
+                    <dt class="col-sm-3">Location:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($company['location'] ?? 'N/A'); ?></dd>
+                </dl>
+            </div>
+        </div>
     <?php endif; ?>
 
-    <dt>Created At:</dt>
-    <dd><?php echo html_escape($user['created_at']); ?></dd>
-
-    <dt>Updated At:</dt>
-    <dd><?php echo html_escape($user['updated_at']); ?></dd>
-</dl>
-
-<?php if ($company): ?>
-    <h2>Company Details</h2>
-    <dl>
-        <dt>Company Name:</dt>
-        <dd><?php echo html_escape($company['company_name']); ?></dd>
-
-        <dt>Company Logo:</dt>
-        <dd> <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" style="max-width: 100px;"></dd>
-
-        <dt>Company Description:</dt>
-        <dd><?php echo html_escape($company['company_description']); ?></dd>
-
-        <dt>Industry:</dt>
-        <dd><?php echo html_escape($company['industry'] ?? 'N/A'); ?></dd>
-
-        <dt>Employee Count:</dt>
-        <dd><?php echo html_escape($company['employee_count'] ?? 'N/A'); ?></dd>
-
-        <dt>Website Link:</dt>
-        <dd><?php echo html_escape($company['website_link'] ?? 'N/A'); ?></dd>
-
-        <dt>Location:</dt>
-        <dd><?php echo html_escape($company['location'] ?? 'N/A'); ?></dd>
-    </dl>
-<?php endif; ?>
-
-<a href="<?php echo generate_url('views/admin/manage_users.php'); ?>" class="btn">Back to Manage Users</a>
+    <a href="<?php echo generate_url('views/admin/manage_users.php'); ?>" class="btn btn-secondary mt-3">Back to Manage Users</a>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

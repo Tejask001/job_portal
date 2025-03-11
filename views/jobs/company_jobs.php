@@ -30,20 +30,25 @@ $jobs = $jobModel->getJobsByCompanyId($company_id);
 $page_title = "Jobs at " . $company['company_name']; //Dynamic title update
 ?>
 
-<h1>Jobs at <?php echo html_escape($company['company_name']); ?></h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Jobs at <?php echo html_escape($company['company_name']); ?></h1>
 
-<?php if (empty($jobs)): ?>
-    <p>No jobs found for this company.</p>
-<?php else: ?>
-    <ul>
-        <?php foreach ($jobs as $job): ?>
-            <li>
-                <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>"><?php echo html_escape($job['title']); ?></a> - <?php echo html_escape($job['job_location']); ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    <?php if (empty($jobs)): ?>
+        <p class="alert alert-info">No jobs found for this company.</p>
+    <?php else: ?>
+        <ul class="list-group">
+            <?php foreach ($jobs as $job): ?>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>">
+                        <?php echo html_escape($job['title']); ?>
+                    </a>
+                    <span class="badge bg-primary rounded-pill"><?php echo html_escape($job['job_location']); ?></span>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
 
-<a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($company_id)); ?>" class="btn">Back to Company Details</a>
+    <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($company_id)); ?>" class="btn btn-secondary mt-3">Back to Company Details</a>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

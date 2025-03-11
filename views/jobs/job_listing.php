@@ -47,79 +47,128 @@ function format_text($text)
 }
 ?>
 
-<h1>Job Listings</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Job Listings</h1>
 
-<form action="" method="GET">
-    <input type="text" name="search" placeholder="Search jobs..." value="<?php echo html_escape($searchTerm); ?>">
-    <button type="submit">Search</button>
-
-    <fieldset>
-        <legend>Opportunity Type</legend>
-        <label><input type="checkbox" name="posting_type[]" value="regular_job" <?php if (in_array('regular_job', $postingTypes)) echo 'checked'; ?>>Regular Job</label>
-        <label><input type="checkbox" name="posting_type[]" value="internship" <?php if (in_array('internship', $postingTypes)) echo 'checked'; ?>> Internship</label>
-    </fieldset>
-
-    <fieldset>
-        <legend>Employment Status</legend>
-        <label><input type="checkbox" name="employment_type[]" value="fulltime" <?php if (in_array('fulltime', $employmentTypes)) echo 'checked'; ?>> Full-time</label>
-        <label><input type="checkbox" name="employment_type[]" value="parttime" <?php if (in_array('parttime', $employmentTypes)) echo 'checked'; ?>> Part-time</label>
-        <label><input type="checkbox" name="employment_type[]" value="contract" <?php if (in_array('contract', $employmentTypes)) echo 'checked'; ?>>Contract</label>
-        <!-- Add new employment types if you have them -->
-    </fieldset>
-
-    <fieldset>
-        <legend>Work Arrangement</legend>
-        <label><input type="checkbox" name="work_type[]" value="onsite" <?php if (in_array('onsite', $workTypes)) echo 'checked'; ?>> On-site</label>
-        <label><input type="checkbox" name="work_type[]" value="remote" <?php if (in_array('remote', $workTypes)) echo 'checked'; ?>> Remote</label>
-        <label><input type="checkbox" name="work_type[]" value="hybrid" <?php if (in_array('hybrid', $workTypes)) echo 'checked'; ?>> Hybrid</label>
-    </fieldset>
-
-    <button type="submit">Apply Filters</button>
-</form>
-
-<?php if (empty($jobs)): ?>
-    <p>No jobs available matching your criteria. Please check back later.</p>
-<?php else: ?>
-    <?php foreach ($jobs as $job): ?>
-        <div class="job-listing">
-            <h3><?php echo html_escape($job['title']); ?></h3>
-            <p class="company-name"><?php echo html_escape($job['company_name']); ?></p>
-            <!-- Display additional Job Fields -->
-            <p><strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?></p>
-            <p><strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?></p>
-            <p><strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?></p>
-            <p><strong>Age:</strong> <?php echo html_escape($job['age']); ?></p>
-            <p><strong>Experience:</strong> <?php echo html_escape($job['experience']); ?></p>
-            <p><?php echo substr(html_escape($job['description']), 0, 100); ?>...</p>
-            <p><strong>Location:</strong> <?php echo html_escape($job['job_location']); ?></p>
-            <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . $job['id']); ?>">View Details</a>
+    <form action="" method="GET" class="mb-3">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="search" placeholder="Search jobs..." value="<?php echo html_escape($searchTerm); ?>">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
         </div>
-    <?php endforeach; ?>
-<?php endif; ?>
 
-<!-- Pagination Links -->
-<div class="pagination">
-    <?php if ($totalPages > 1): ?>
-        <?php
-        $startPage = max(1, $page - floor(PAGINATION_LINKS / 2));
-        $endPage = min($totalPages, $startPage + PAGINATION_LINKS - 1);
+        <div class="row">
+            <div class="col-md-4">
+                <fieldset class="border p-2">
+                    <legend class="w-auto px-2">Opportunity Type</legend>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="posting_type[]" value="regular_job" id="regular_job" <?php if (in_array('regular_job', $postingTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="regular_job">Regular Job</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="posting_type[]" value="internship" id="internship" <?php if (in_array('internship', $postingTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="internship">Internship</label>
+                    </div>
+                </fieldset>
+            </div>
 
-        // Adjust start page if end page is not the total pages
-        $startPage = max(1, $endPage - PAGINATION_LINKS + 1);
-        ?>
+            <div class="col-md-4">
+                <fieldset class="border p-2">
+                    <legend class="w-auto px-2">Employment Status</legend>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type[]" value="fulltime" id="fulltime" <?php if (in_array('fulltime', $employmentTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="fulltime">Full-time</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type[]" value="parttime" id="parttime" <?php if (in_array('parttime', $employmentTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="parttime">Part-time</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type[]" value="contract" id="contract" <?php if (in_array('contract', $employmentTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="contract">Contract</label>
+                    </div>
+                </fieldset>
+            </div>
 
-        <?php if ($page > 1): ?>
-            <a href="<?php echo getCurrentUrlWithNewPage($page - 1); ?>">Previous</a> <!-- Remove generate_url() -->
-        <?php endif; ?>
+            <div class="col-md-4">
+                <fieldset class="border p-2">
+                    <legend class="w-auto px-2">Work Arrangement</legend>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="work_type[]" value="onsite" id="onsite" <?php if (in_array('onsite', $workTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="onsite">On-site</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="work_type[]" value="remote" id="remote" <?php if (in_array('remote', $workTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="remote">Remote</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="work_type[]" value="hybrid" id="hybrid" <?php if (in_array('hybrid', $workTypes)) echo 'checked'; ?>>
+                        <label class="form-check-label" for="hybrid">Hybrid</label>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
 
-        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
-            <a href="<?php echo getCurrentUrlWithNewPage($i); ?>" <?php if ($i == $page) echo 'class="active"'; ?>><?php echo $i; ?></a> <!-- Remove generate_url() -->
-        <?php endfor; ?>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </form>
 
-        <?php if ($page < $totalPages): ?>
-            <a href="<?php echo getCurrentUrlWithNewPage($page + 1); ?>">Next</a> <!-- Remove generate_url() -->
-        <?php endif; ?>
+    <?php if (empty($jobs)): ?>
+        <p class="alert alert-info">No jobs available matching your criteria. Please check back later.</p>
+    <?php else: ?>
+        <div class="row">
+            <?php foreach ($jobs as $job): ?>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo html_escape($job['title']); ?></h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><?php echo html_escape($job['company_name']); ?></h6>
+                            <p class="card-text">
+                                <strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?><br>
+                                <strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?><br>
+                                <strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?><br>
+                                <strong>Age:</strong> <?php echo html_escape($job['age']); ?><br>
+                                <strong>Experience:</strong> <?php echo html_escape($job['experience']); ?><br>
+                                <?php echo substr(html_escape($job['description']), 0, 100); ?>...<br>
+                                <strong>Location:</strong> <?php echo html_escape($job['job_location']); ?>
+                            </p>
+                            <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . $job['id']); ?>" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
+
+    <!-- Pagination Links -->
+    <?php if ($totalPages > 1): ?>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <?php
+                $startPage = max(1, $page - floor(PAGINATION_LINKS / 2));
+                $endPage = min($totalPages, $startPage + PAGINATION_LINKS - 1);
+                $startPage = max(1, $endPage - PAGINATION_LINKS + 1); // Adjust start page
+                ?>
+
+                <li class="page-item <?php if ($page <= 1) echo 'disabled'; ?>">
+                    <a class="page-link" href="<?php echo getCurrentUrlWithNewPage($page - 1); ?>" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+
+                <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+                    <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
+                        <a class="page-link" href="<?php echo getCurrentUrlWithNewPage($i); ?>"><?php echo $i; ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <li class="page-item <?php if ($page >= $totalPages) echo 'disabled'; ?>">
+                    <a class="page-link" href="<?php echo getCurrentUrlWithNewPage($page + 1); ?>" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    <?php endif; ?>
+
 </div>
 
 <?php

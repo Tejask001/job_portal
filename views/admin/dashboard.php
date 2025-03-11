@@ -10,13 +10,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 }
 ?>
 
-<h1>Admin Dashboard</h1>
-<p>Manage users and job postings.</p>
+<div class="container mt-4">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    <p>Manage users and job postings.</p>
 
-<ul>
-    <li><a href="<?php echo generate_url('views/admin/manage_users.php'); ?>">Manage Users</a></li>
-    <li><a href="<?php echo generate_url('views/admin/manage_jobs.php'); ?>">Manage Jobs</a></li>
-    <li><a href="<?php echo generate_url('views/admin/post_job_as_company.php'); ?>">Post Job For Company</a></li>
-</ul>
+    <div class="list-group">
+        <a href="<?php echo generate_url('views/admin/manage_users.php'); ?>" class="list-group-item list-group-item-action">Manage Users</a>
+        <a href="<?php echo generate_url('views/admin/manage_jobs.php'); ?>" class="list-group-item list-group-item-action">Manage Jobs</a>
+        <a href="<?php echo generate_url('views/admin/post_job_as_company.php'); ?>" class="list-group-item list-group-item-action">Post Job For Company</a>
+    </div>
+</div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

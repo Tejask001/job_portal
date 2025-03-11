@@ -39,100 +39,117 @@ if ($job['company_id'] !== $company['id']) {
 }
 ?>
 
-<h1>Edit Job</h1>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Edit Job</h1>
 
-<form action="<?php echo generate_url('controllers/JobController.php?action=update_job&id=' . html_escape($job_id)); ?>" method="post">
-    <div class="form-group">
-        <label for="title">Job Title:</label>
-        <input type="text" id="title" name="title" value="<?php echo html_escape($job['title']); ?>" required>
+            <form action="<?php echo generate_url('controllers/JobController.php?action=update_job&id=' . html_escape($job_id)); ?>" method="post">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Job Title:</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<?php echo html_escape($job['title']); ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Job Description:</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required><?php echo html_escape($job['description']); ?></textarea>
+                </div>
+
+                <!-- Opportunity Type -->
+                <div class="mb-3">
+                    <label for="opportunity_type" class="form-label">Opportunity Type:</label>
+                    <select class="form-select" id="opportunity_type" name="posting_type" required>
+                        <option value="regular_job" <?php if ($job['posting_type'] == 'regular_job') echo 'selected'; ?>>Regular Job</option>
+                        <option value="internship" <?php if ($job['posting_type'] == 'internship') echo 'selected'; ?>>Internship</option>
+                    </select>
+                </div>
+
+                <!-- Employment Status -->
+                <div class="mb-3">
+                    <label for="employment_status" class="form-label">Employment Status:</label>
+                    <select class="form-select" id="employment_status" name="employment_type" required>
+                        <option value="fulltime" <?php if ($job['employment_type'] == 'fulltime') echo 'selected'; ?>>Full-time</option>
+                        <option value="parttime" <?php if ($job['employment_type'] == 'parttime') echo 'selected'; ?>>Part-time</option>
+                        <option value="contract" <?php if ($job['employment_type'] == 'contract') echo 'selected'; ?>>Contract</option>
+                    </select>
+                </div>
+
+                <!-- Work Arrangement -->
+                <div class="mb-3">
+                    <label for="work_arrangement" class="form-label">Work Arrangement:</label>
+                    <select class="form-select" id="work_arrangement" name="work_type" required>
+                        <option value="onsite" <?php if ($job['work_type'] == 'onsite') echo 'selected'; ?>>On-site</option>
+                        <option value="remote" <?php if ($job['work_type'] == 'remote') echo 'selected'; ?>>Remote</option>
+                        <option value="hybrid" <?php if ($job['work_type'] == 'hybrid') echo 'selected'; ?>>Hybrid</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="skills" class="form-label">Skills Required (Comma-separated):</label>
+                    <input type="text" class="form-control" id="skills" name="skills" value="<?php echo html_escape($job['skills']); ?>" placeholder="e.g., HTML, CSS, JavaScript">
+                </div>
+
+                <div class="mb-3">
+                    <label for="job_location" class="form-label">Job Location:</label>
+                    <input type="text" class="form-control" id="job_location" name="job_location" value="<?php echo html_escape($job['job_location']); ?>" required placeholder="e.g., City, State">
+                </div>
+
+                <div class="mb-3">
+                    <label for="no_of_openings" class="form-label">Number of Openings:</label>
+                    <input type="number" class="form-control" id="no_of_openings" name="no_of_openings" value="<?php echo html_escape($job['no_of_openings']); ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Start Date:</label>
+                    <input type="date" class="form-control" id="start_date" name="start_date" value="<?php echo html_escape($job['start_date']); ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Duration (for internships):</label>
+                    <input type="text" class="form-control" id="duration" name="duration" value="<?php echo html_escape($job['duration']); ?>" placeholder="e.g., 3 months">
+                </div>
+
+                <div class="mb-3">
+                    <label for="who_can_apply" class="form-label">Who Can Apply:</label>
+                    <input type="text" class="form-control" id="who_can_apply" name="who_can_apply" value="<?php echo html_escape($job['who_can_apply']); ?>" placeholder="e.g., 3rd year engineering students">
+                </div>
+
+                <div class="mb-3">
+                    <label for="stipend_salary" class="form-label">Stipend/Salary:</label>
+                    <input type="text" class="form-control" id="stipend_salary" name="stipend_salary" value="<?php echo html_escape($job['stipend_salary']); ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="perks" class="form-label">Perks (Comma-separated):</label>
+                    <input type="text" class="form-control" id="perks" name="perks" value="<?php echo html_escape($job['perks']); ?>" placeholder="e.g., Certificate, Letter of Recommendation">
+                </div>
+
+                <div class="mb-3">
+                    <label for="age" class="form-label">Age:</label>
+                    <input type="text" class="form-control" id="age" name="age" value="<?php echo html_escape($job['age']); ?>" placeholder="e.g., 20-25, Any">
+                </div>
+
+                <div class="mb-3">
+                    <label for="gender_preferred" class="form-label">Gender Preferred:</label>
+                    <select class="form-select" id="gender_preferred" name="gender_preferred">
+                        <option value="open to all" <?php echo ($job['gender_preferred'] == 'open to all') ? 'selected' : ''; ?>>Open to All</option>
+                        <option value="male" <?php echo ($job['gender_preferred'] == 'male') ? 'selected' : ''; ?>>Male</option>
+                        <option value="female" <?php echo ($job['gender_preferred'] == 'female') ? 'selected' : ''; ?>>Female</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="experience" class="form-label">Experience:</label>
+                    <input type="text" class="form-control" id="experience" name="experience" value="<?php echo html_escape($job['experience']); ?>" placeholder="e.g., 2+ years, Entry Level">
+                </div>
+
+                <div class="mb-3">
+                    <label for="key_responsibilities" class="form-label">Key Responsibilities:</label>
+                    <textarea class="form-control" id="key_responsibilities" name="key_responsibilities" rows="4" placeholder="List the key responsibilities of the job"><?php echo html_escape($job['key_responsibilities']); ?></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Job</button>
+            </form>
+        </div>
     </div>
+</div>
 
-    <div class="form-group">
-        <label for="description">Job Description:</label>
-        <textarea id="description" name="description" rows="4" required><?php echo html_escape($job['description']); ?></textarea>
-    </div>
-
-    <!-- Opportunity Type -->
-    <div class="form-group">
-        <label for="opportunity_type">Opportunity Type:</label>
-        <select id="opportunity_type" name="posting_type" required>
-            <option value="regular_job">Regular Job</option>
-            <option value="internship">Internship</option>
-        </select>
-    </div>
-
-    <!-- Employment Status -->
-    <div class="form-group">
-        <label for="employment_status">Employment Status:</label>
-        <select id="employment_status" name="employment_type" required>
-            <option value="fulltime">Full-time</option>
-            <option value="parttime">Part-time</option>
-            <option value="contract">Contract</option>
-        </select>
-    </div>
-
-    <!-- Work Arrangement -->
-    <div class="form-group">
-        <label for="work_arrangement">Work Arrangement:</label>
-        <select id="work_arrangement" name="work_type" required>
-            <option value="onsite">On-site</option>
-            <option value="remote">Remote</option>
-            <option value="hybrid">Hybrid</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="skills">Skills Required (Comma-separated):</label>
-        <input type="text" id="skills" name="skills" value="<?php echo html_escape($job['skills']); ?>" placeholder="e.g., HTML, CSS, JavaScript">
-    </div>
-
-    <div class="form-group">
-        <label for="job_location">Job Location:</label>
-        <input type="text" id="job_location" name="job_location" value="<?php echo html_escape($job['job_location']); ?>" required placeholder="e.g., City, State">
-    </div>
-
-    <div class="form-group">
-        <label for="no_of_openings">Number of Openings:</label>
-        <input type="number" id="no_of_openings" name="no_of_openings" value="<?php echo html_escape($job['no_of_openings']); ?>" required>
-    </div>
-
-    <div class="form-group">
-        <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date" name="start_date" value="<?php echo html_escape($job['start_date']); ?>" required>
-    </div>
-
-    <div class="form-group">
-        <label for="duration">Duration (for internships):</label>
-        <input type="text" id="duration" name="duration" value="<?php echo html_escape($job['duration']); ?>" placeholder="e.g., 3 months">
-    </div>
-
-    <div class="form-group">
-        <label for="who_can_apply">Who Can Apply:</label>
-        <input type="text" id="who_can_apply" name="who_can_apply" value="<?php echo html_escape($job['who_can_apply']); ?>" placeholder="e.g., 3rd year engineering students">
-    </div>
-
-    <div class="form-group">
-        <label for="stipend_salary">Stipend/Salary:</label>
-        <input type="text" id="stipend_salary" name="stipend_salary" value="<?php echo html_escape($job['stipend_salary']); ?>" required>
-    </div>
-
-    <div class="form-group">
-        <label for="perks">Perks (Comma-separated):</label>
-        <input type="text" id="perks" name="perks" value="<?php echo html_escape($job['perks']); ?>" placeholder="e.g., Certificate, Letter of Recommendation">
-    </div>
-
-    <div class="form-group">
-        <label for="age">Age:</label>
-        <input type="text" id="age" name="age" value="<?php echo html_escape($job['age']); ?>" placeholder="e.g., 20-25, Any">
-    </div>
-
-    <div class="form-group">
-        <label for="gender_preferred">Gender Preferred:</label>
-        <select id="gender_preferred" name="gender_preferred">
-            <option value="open to all" <?php echo ($job['gender_preferred'] == 'open to all') ? 'selected' : ''; ?>>Open to All</option>
-            <option value="male" <?php echo ($job['gender_preferred'] == 'male') ? 'selected' : ''; ?>>Male</option>
-            <option value="female" <?php echo ($job['gender_preferred'] == 'female') ? 'selected' : ''; ?>>Female</option>
-        </select>
-    </div>
-
-    <div class="form-group
+<?php include __DIR__ . '/../layouts/footer.php'; ?>
