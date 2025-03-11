@@ -229,6 +229,8 @@ class UserController
         $deleted = $this->applicationModel->deleteApplication($application_id);
 
         if ($deleted) {
+
+            $this->jobModel->decrementPositionsFilled($application['job_id']);
             $_SESSION['success_message'] = "Application deleted successfully!";
         } else {
             $_SESSION['error_message'] = "Failed to delete application.";

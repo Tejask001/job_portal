@@ -85,6 +85,13 @@ class Job
         return $stmt->rowCount();
     }
 
+    public function decrementPositionsFilled($job_id)
+    {
+        $stmt = $this->pdo->prepare("UPDATE jobs SET positions_filled = positions_filled - 1 WHERE id = ?");
+        $stmt->execute([$job_id]);
+        return $stmt->rowCount();
+    }
+
     public function searchJobs($searchTerm, $page = 1)
     {
         $offset = ($page - 1) * JOBS_PER_PAGE;
