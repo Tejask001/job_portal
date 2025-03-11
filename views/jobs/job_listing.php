@@ -29,6 +29,13 @@ if ($searchTerm) {
 } else {
     $jobs = $jobModel->getAllJobs(true); // Get only approved jobs
 }
+
+function format_text($text)
+{
+    $text = str_replace('_', ' ', $text);  // Replace underscores with spaces
+    $text = ucwords($text);               // Capitalize the first letter of each word
+    return html_escape($text);             // Escape HTML entities
+}
 ?>
 
 <h1>Job Listings</h1>
@@ -38,19 +45,21 @@ if ($searchTerm) {
     <button type="submit">Search</button>
 
     <fieldset>
-        <legend>Posting Type</legend>
-        <label><input type="checkbox" name="posting_type[]" value="fulltime" <?php if (in_array('fulltime', $postingTypes)) echo 'checked'; ?>> Full-time</label>
+        <legend>Opportunity Type</legend>
+        <label><input type="checkbox" name="posting_type[]" value="regular_job" <?php if (in_array('regular_job', $postingTypes)) echo 'checked'; ?>>Regular Job</label>
         <label><input type="checkbox" name="posting_type[]" value="internship" <?php if (in_array('internship', $postingTypes)) echo 'checked'; ?>> Internship</label>
     </fieldset>
 
     <fieldset>
-        <legend>Employment Type</legend>
+        <legend>Employment Status</legend>
         <label><input type="checkbox" name="employment_type[]" value="fulltime" <?php if (in_array('fulltime', $employmentTypes)) echo 'checked'; ?>> Full-time</label>
         <label><input type="checkbox" name="employment_type[]" value="parttime" <?php if (in_array('parttime', $employmentTypes)) echo 'checked'; ?>> Part-time</label>
+        <label><input type="checkbox" name="employment_type[]" value="contract" <?php if (in_array('contract', $employmentTypes)) echo 'checked'; ?>>Contract</label>
+        <!-- Add new employment types if you have them -->
     </fieldset>
 
     <fieldset>
-        <legend>Work Type</legend>
+        <legend>Work Arrangement</legend>
         <label><input type="checkbox" name="work_type[]" value="onsite" <?php if (in_array('onsite', $workTypes)) echo 'checked'; ?>> On-site</label>
         <label><input type="checkbox" name="work_type[]" value="remote" <?php if (in_array('remote', $workTypes)) echo 'checked'; ?>> Remote</label>
         <label><input type="checkbox" name="work_type[]" value="hybrid" <?php if (in_array('hybrid', $workTypes)) echo 'checked'; ?>> Hybrid</label>
@@ -66,6 +75,12 @@ if ($searchTerm) {
         <div class="job-listing">
             <h3><?php echo html_escape($job['title']); ?></h3>
             <p class="company-name"><?php echo html_escape($job['company_name']); ?></p>
+            <!-- Display additional Job Fields -->
+            <p><strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?></p>
+            <p><strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?></p>
+            <p><strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?></p>
+            <p><strong>Age:</strong> <?php echo html_escape($job['age']); ?></p>
+            <p><strong>Experience:</strong> <?php echo html_escape($job['experience']); ?></p>
             <p><?php echo substr(html_escape($job['description']), 0, 100); ?>...</p>
             <p><strong>Location:</strong> <?php echo html_escape($job['job_location']); ?></p>
             <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . $job['id']); ?>">View Details</a>
