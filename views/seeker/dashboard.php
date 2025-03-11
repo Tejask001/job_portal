@@ -98,7 +98,7 @@ $jobModel = new Job($pdo);
                     <a href="<?php echo generate_url('views/seeker/profile.php'); ?>" class="btn btn-primary mb-2 w-100">
                         <i class="bi bi-person-circle"></i> Update Profile
                     </a>
-                    <a href="<?php echo generate_url('views/seeker/saved_jobs.php'); ?>" class="btn btn-outline-primary mb-2 w-100">
+                    <a href="<?php echo generate_url('views/seeker/saved_jobs.php'); ?>" class="btn btn-info mb-2 w-100">
                         <i class="bi bi-bookmark-heart"></i> View Saved Jobs
                     </a>
                     <a href="<?php echo generate_url('views/jobs/job_listing.php'); ?>" class="btn btn-success w-100">
