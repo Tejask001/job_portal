@@ -13,9 +13,14 @@ $postingTypes = $_GET['posting_type'] ?? [];
 $employmentTypes = $_GET['employment_type'] ?? [];
 $workTypes = $_GET['work_type'] ?? [];
 
-// Determine which jobs to retrieve
+// Determine current page
+$page = $_GET['page'] ?? 1;
+$page = max(1, intval($page));
+
+// Determine which jobs to retrieve and get the total count
 if ($searchTerm) {
-    $jobs = $jobModel->searchJobs($searchTerm);
+    $jobs = $jobModel->searchJobs($searchTerm, $page);
+    $totalJobs = $jobModel->getTotalSearchResults($searchTerm);
     if (!empty($postingTypes) || !empty($employmentTypes) || !empty($workTypes)) {
         $jobs = array_filter($jobs, function ($job) use ($postingTypes, $employmentTypes, $workTypes) {
             $postingTypeCondition = empty($postingTypes) || in_array($job['posting_type'], $postingTypes);
@@ -25,10 +30,14 @@ if ($searchTerm) {
         });
     }
 } elseif (!empty($postingTypes) || !empty($employmentTypes) || !empty($workTypes)) {
-    $jobs = $jobModel->filterJobs($postingTypes, $employmentTypes, $workTypes);
+    $jobs = $jobModel->filterJobs($postingTypes, $employmentTypes, $workTypes, $page);
+    $totalJobs = $jobModel->getTotalFilteredJobs($postingTypes, $employmentTypes, $workTypes);
 } else {
-    $jobs = $jobModel->getAllJobs(true); // Get only approved jobs
+    $jobs = $jobModel->getAllJobs(true, null, $page); // Get only approved jobs
+    $totalJobs = $jobModel->getTotalJobs(true);
 }
+
+$totalPages = ceil($totalJobs / JOBS_PER_PAGE);
 
 function format_text($text)
 {
@@ -87,5 +96,46 @@ function format_text($text)
         </div>
     <?php endforeach; ?>
 <?php endif; ?>
+
+<!-- Pagination Links -->
+<div class="pagination">
+    <?php if ($totalPages > 1): ?>
+        <?php
+        $startPage = max(1, $page - floor(PAGINATION_LINKS / 2));
+        $endPage = min($totalPages, $startPage + PAGINATION_LINKS - 1);
+
+        // Adjust start page if end page is not the total pages
+        $startPage = max(1, $endPage - PAGINATION_LINKS + 1);
+        ?>
+
+        <?php if ($page > 1): ?>
+            <a href="<?php echo getCurrentUrlWithNewPage($page - 1); ?>">Previous</a> <!-- Remove generate_url() -->
+        <?php endif; ?>
+
+        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+            <a href="<?php echo getCurrentUrlWithNewPage($i); ?>" <?php if ($i == $page) echo 'class="active"'; ?>><?php echo $i; ?></a> <!-- Remove generate_url() -->
+        <?php endfor; ?>
+
+        <?php if ($page < $totalPages): ?>
+            <a href="<?php echo getCurrentUrlWithNewPage($page + 1); ?>">Next</a> <!-- Remove generate_url() -->
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
+
+<?php
+function getCurrentUrlWithNewPage($page)
+{
+    $url = $_SERVER['REQUEST_URI'];
+    $url_parts = parse_url($url);
+    $query = [];
+
+    if (!empty($url_parts['query'])) {
+        parse_str($url_parts['query'], $query);
+    }
+
+    $query['page'] = $page;
+    return $url_parts['path'] . '?' . http_build_query($query);
+}
+?>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

@@ -6,7 +6,7 @@ require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/models/Job.php';
 
 $jobModel = new Job($pdo);
-$jobs = $jobModel->getAllJobs(true); // Get only approved jobs
+$jobs = $jobModel->getAllJobs(true, 10); // Get only approved jobs and limit to 10
 
 ?>
 

@@ -196,4 +196,7 @@ class JobController
 
 // Create an instance and handle the request
 $jobController = new JobController($pdo);
+// The controller itself does not need to be modified
+// It simple takes what the model does, and returns a successful request
+//The controller only need to be aware, if your making functions in the view that call and return new functions in the Job model.
 $jobController->handleRequest();
