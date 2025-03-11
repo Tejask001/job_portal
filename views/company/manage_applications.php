@@ -50,6 +50,7 @@ $applications = $companyController->getJobApplications($company['id']);
                             <td><?php echo html_escape($application['applied_at']); ?></td>
                             <td><?php echo html_escape($application['application_status']); ?></td>
                             <td>
+                                <a href="<?php echo generate_url('views/company/view_application.php?application_id=' . html_escape($application['id'])); ?>" class="btn btn-info btn-sm">View Application</a>
                                 <?php if ($application['application_status'] === 'pending'): ?>
                                     <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=approved'); ?>" class="btn btn-success btn-sm">Approve</a>
                                     <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=rejected'); ?>" class="btn btn-danger btn-sm">Reject</a>

@@ -3,10 +3,10 @@ $page_title = "Login";
 include __DIR__ . '/../layouts/header.php';
 ?>
 
-<div class="container mt-4">
-    <div class="card">
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
         <div class="card-body">
-            <h1 class="card-title">Login</h1>
+            <h2 class="card-title text-center mb-4">Login</h2>
 
             <form action="<?php echo generate_url('controllers/AuthController.php?action=login'); ?>" method="post">
                 <div class="mb-3">
@@ -17,8 +17,10 @@ include __DIR__ . '/../layouts/header.php';
                     <label for="password" class="form-label">Password:</label>
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <p class="mt-2">Don't have an account? <a href="<?php echo generate_url('views/auth/register.php'); ?>">Register</a></p>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <p class="mt-3 text-center">Don't have an account?
+                    <a href="<?php echo generate_url('views/auth/register.php'); ?>" class="text-primary">Register</a>
+                </p>
             </form>
         </div>
     </div>
