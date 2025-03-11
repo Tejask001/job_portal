@@ -30,6 +30,14 @@ class Company
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getAllCompanies()
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM companies");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     public function updateCompanyProfile($id, $company_name, $company_logo, $company_description)
     {
         $stmt = $this->pdo->prepare("UPDATE companies SET company_name = ?, company_logo = ?, company_description = ? WHERE id = ?");

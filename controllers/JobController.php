@@ -20,7 +20,7 @@ class JobController
         $this->pdo = $pdo;
     }
 
-    public function postJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function postJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities)
     {
         if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($job_location) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
             $_SESSION['error_message'] = "All fields are required.";
@@ -28,18 +28,26 @@ class JobController
             return;
         }
 
-        $job_id = $this->jobModel->createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
+        $job_id = $this->jobModel->createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities);
 
         if ($job_id) {
             $_SESSION['success_message'] = "Job posted successfully! Waiting for admin approval.";
-            redirect('/job_portal/views/company/dashboard.php');
+
+            // Determine where to redirect based on who posted the job
+            if (isset($_POST['posted_by']) && $_POST['posted_by'] === 'admin') {
+                // Redirect to the admin's job management page or another admin-appropriate page
+                redirect('/job_portal/views/admin/manage_jobs.php'); // Example: Redirect to admin job management
+            } else {
+                // Redirect to the company's dashboard (original behavior)
+                redirect('/job_portal/views/company/dashboard.php');
+            }
         } else {
             $_SESSION['error_message'] = "Job posting failed. Please try again.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/post_job.php');
         }
     }
 
-    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities)
     {
         if (empty($title) || empty($description) || empty($posting_type) || empty($employment_type) || empty($work_type) || empty($skills) || empty($job_location) || empty($no_of_openings) || empty($start_date) || empty($stipend_salary)) {
             $_SESSION['error_message'] = "All fields are required.";
@@ -47,7 +55,7 @@ class JobController
             return;
         }
 
-        $updated = $this->jobModel->updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks);
+        $updated = $this->jobModel->updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities);
 
         if ($updated) {
             $_SESSION['success_message'] = "Job updated successfully!";
@@ -135,7 +143,11 @@ class JobController
                         $_POST['duration'] ?? '',
                         $_POST['who_can_apply'] ?? '',
                         $_POST['stipend_salary'] ?? '',
-                        $_POST['perks'] ?? ''
+                        $_POST['perks'] ?? '',
+                        $_POST['age'] ?? '',
+                        $_POST['gender_preferred'] ?? 'open to all',
+                        $_POST['experience'] ?? '',
+                        $_POST['key_responsibilities'] ?? ''
                     );
                     break;
                 case 'update_job':
@@ -153,7 +165,11 @@ class JobController
                         $_POST['duration'] ?? '',
                         $_POST['who_can_apply'] ?? '',
                         $_POST['stipend_salary'] ?? '',
-                        $_POST['perks'] ?? ''
+                        $_POST['perks'] ?? '',
+                        $_POST['age'] ?? '',
+                        $_POST['gender_preferred'] ?? 'open to all',
+                        $_POST['experience'] ?? '',
+                        $_POST['key_responsibilities'] ?? ''
                     );
                     break;
                 case 'delete_job':

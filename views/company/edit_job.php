@@ -52,28 +52,32 @@ if ($job['company_id'] !== $company['id']) {
         <textarea id="description" name="description" rows="4" required><?php echo html_escape($job['description']); ?></textarea>
     </div>
 
+    <!-- Opportunity Type -->
     <div class="form-group">
-        <label for="posting_type">Posting Type:</label>
-        <select id="posting_type" name="posting_type" required>
-            <option value="fulltime" <?php echo ($job['posting_type'] == 'fulltime') ? 'selected' : ''; ?>>Full-time</option>
-            <option value="internship" <?php echo ($job['posting_type'] == 'internship') ? 'selected' : ''; ?>>Internship</option>
+        <label for="opportunity_type">Opportunity Type:</label>
+        <select id="opportunity_type" name="posting_type" required>
+            <option value="regular_job">Regular Job</option>
+            <option value="internship">Internship</option>
         </select>
     </div>
 
+    <!-- Employment Status -->
     <div class="form-group">
-        <label for="employment_type">Employment Type:</label>
-        <select id="employment_type" name="employment_type" required>
-            <option value="fulltime" <?php echo ($job['employment_type'] == 'fulltime') ? 'selected' : ''; ?>>Full-time</option>
-            <option value="parttime" <?php echo ($job['employment_type'] == 'parttime') ? 'selected' : ''; ?>>Part-time</option>
+        <label for="employment_status">Employment Status:</label>
+        <select id="employment_status" name="employment_type" required>
+            <option value="fulltime">Full-time</option>
+            <option value="parttime">Part-time</option>
+            <option value="contract">Contract</option>
         </select>
     </div>
 
+    <!-- Work Arrangement -->
     <div class="form-group">
-        <label for="work_type">Work Type:</label>
-        <select id="work_type" name="work_type" required>
-            <option value="onsite" <?php echo ($job['work_type'] == 'onsite') ? 'selected' : ''; ?>>On-site</option>
-            <option value="remote" <?php echo ($job['work_type'] == 'remote') ? 'selected' : ''; ?>>Remote</option>
-            <option value="hybrid" <?php echo ($job['work_type'] == 'hybrid') ? 'selected' : ''; ?>>Hybrid</option>
+        <label for="work_arrangement">Work Arrangement:</label>
+        <select id="work_arrangement" name="work_type" required>
+            <option value="onsite">On-site</option>
+            <option value="remote">Remote</option>
+            <option value="hybrid">Hybrid</option>
         </select>
     </div>
 
@@ -117,7 +121,18 @@ if ($job['company_id'] !== $company['id']) {
         <input type="text" id="perks" name="perks" value="<?php echo html_escape($job['perks']); ?>" placeholder="e.g., Certificate, Letter of Recommendation">
     </div>
 
-    <button type="submit" class="btn">Update Job</button>
-</form>
+    <div class="form-group">
+        <label for="age">Age:</label>
+        <input type="text" id="age" name="age" value="<?php echo html_escape($job['age']); ?>" placeholder="e.g., 20-25, Any">
+    </div>
 
-<?php include __DIR__ . '/../layouts/footer.php'; ?>
+    <div class="form-group">
+        <label for="gender_preferred">Gender Preferred:</label>
+        <select id="gender_preferred" name="gender_preferred">
+            <option value="open to all" <?php echo ($job['gender_preferred'] == 'open to all') ? 'selected' : ''; ?>>Open to All</option>
+            <option value="male" <?php echo ($job['gender_preferred'] == 'male') ? 'selected' : ''; ?>>Male</option>
+            <option value="female" <?php echo ($job['gender_preferred'] == 'female') ? 'selected' : ''; ?>>Female</option>
+        </select>
+    </div>
+
+    <div class="form-group

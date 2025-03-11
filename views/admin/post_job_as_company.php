@@ -1,9 +1,9 @@
 <?php
-$page_title = "Post a Job";
+$page_title = "Post Job as Company";
 include __DIR__ . '/../layouts/header.php';
 
-// Check if the user is logged in and is a company
-if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'company') {
+// Check if the user is logged in and is an admin
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     $_SESSION['error_message'] = "Unauthorized access.";
     redirect(generate_url('views/auth/login.php')); // Redirect to login page
     exit();
@@ -11,19 +11,29 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'company') {
 
 require_once __DIR__ . '/../../models/Company.php';
 $companyModel = new Company($pdo);
-$company = $companyModel->getCompanyByUserId($_SESSION['user_id']);
+$companies = $companyModel->getAllCompanies();
 
-if (!$company) {
-    $_SESSION['error_message'] = "Please create your company profile first.";
-    redirect(generate_url('views/company/company_profile.php'));
+if (!$companies) {
+    echo "<p>No companies found. Please create a company first.</p>";
+    include __DIR__ . '/../layouts/footer.php';
     exit();
 }
 ?>
 
-<h1>Post a New Job</h1>
+<h1>Post Job as Company</h1>
 
 <form action="<?php echo generate_url('controllers/JobController.php?action=post_job'); ?>" method="post">
-    <input type="hidden" name="company_id" value="<?php echo html_escape($company['id']); ?>">
+
+    <input type="hidden" name="posted_by" value="admin">
+
+    <div class="form-group">
+        <label for="company_id">Select Company:</label>
+        <select id="company_id" name="company_id" required>
+            <?php foreach ($companies as $company): ?>
+                <option value="<?php echo $company['id']; ?>"><?php echo $company['company_name']; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
 
     <div class="form-group">
         <label for="title">Job Title:</label>
@@ -35,29 +45,25 @@ if (!$company) {
         <textarea id="description" name="description" rows="4" required></textarea>
     </div>
 
-    <!-- Opportunity Type -->
     <div class="form-group">
-        <label for="opportunity_type">Opportunity Type:</label>
-        <select id="opportunity_type" name="posting_type" required>
+        <label for="posting_type">Posting Type:</label>
+        <select id="posting_type" name="posting_type" required>
             <option value="regular_job">Regular Job</option>
             <option value="internship">Internship</option>
         </select>
     </div>
 
-    <!-- Employment Status -->
     <div class="form-group">
-        <label for="employment_status">Employment Status:</label>
-        <select id="employment_status" name="employment_type" required>
+        <label for="employment_type">Employment Status:</label>
+        <select id="employment_type" name="employment_type" required>
             <option value="fulltime">Full-time</option>
             <option value="parttime">Part-time</option>
-            <option value="contract">Contract</option>
         </select>
     </div>
 
-    <!-- Work Arrangement -->
     <div class="form-group">
-        <label for="work_arrangement">Work Arrangement:</label>
-        <select id="work_arrangement" name="work_type" required>
+        <label for="work_type">Work Arrangement:</label>
+        <select id="work_type" name="work_type" required>
             <option value="onsite">On-site</option>
             <option value="remote">Remote</option>
             <option value="hybrid">Hybrid</option>

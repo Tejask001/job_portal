@@ -42,6 +42,13 @@ if ($is_seeker) {
         }
     }
 }
+
+function format_text($text)
+{
+    $text = str_replace('_', ' ', $text);  // Replace underscores with spaces
+    $text = ucwords($text);               // Capitalize the first letter of each word
+    return html_escape($text);             // Escape HTML entities
+}
 ?>
 
 <h1><?php echo html_escape($job['title']); ?></h1>
@@ -50,15 +57,22 @@ if ($is_seeker) {
 <p><strong>Description:</strong></p>
 <p><?php echo html_escape($job['description']); ?></p>
 
-<p><strong>Posting Type:</strong> <?php echo html_escape($job['posting_type']); ?></p>
-<p><strong>Employment Type:</strong> <?php echo html_escape($job['employment_type']); ?></p>
-<p><strong>Work Type:</strong> <?php echo html_escape($job['work_type']); ?></p>
+<p><strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?></p>
+<p><strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?></p>
+<p><strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?></p>
 <p><strong>Job Location:</strong> <?php echo html_escape($job['job_location']); ?></p>
 <p><strong>Skills Required:</strong> <?php echo html_escape($job['skills']); ?></p>
 <p><strong>Number of Openings:</strong> <?php echo html_escape($job['no_of_openings']); ?></p>
 <p><strong>Start Date:</strong> <?php echo html_escape($job['start_date']); ?></p>
 <p><strong>Stipend/Salary:</strong> <?php echo html_escape($job['stipend_salary']); ?></p>
 <p><strong>Perks:</strong> <?php echo html_escape($job['perks']); ?></p>
+
+<!-- Display new fields -->
+<p><strong>Age:</strong> <?php echo html_escape($job['age']); ?></p>
+<p><strong>Gender Preferred:</strong> <?php echo format_text($job['gender_preferred']); ?></p>
+<p><strong>Experience:</strong> <?php echo html_escape($job['experience']); ?></p>
+<p><strong>Key Responsibilities:</strong></p>
+<p><?php echo nl2br(html_escape($job['key_responsibilities'])); ?></p> <!-- nl2br for line breaks in textareas -->
 
 <?php if ($is_seeker): ?>
     <?php if ($is_saved): ?>

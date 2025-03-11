@@ -8,10 +8,10 @@ class Job
         $this->pdo = $pdo;
     }
 
-    public function createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function createJob($company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO jobs (company_id, title, description, posting_type, employment_type, work_type, skills, job_location, no_of_openings, start_date, duration, who_can_apply, stipend_salary, perks) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks]);
+        $stmt = $this->pdo->prepare("INSERT INTO jobs (company_id, title, description, posting_type, employment_type, work_type, skills, job_location, no_of_openings, start_date, duration, who_can_apply, stipend_salary, perks, age, gender_preferred, experience, key_responsibilities) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$company_id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities]);
         return $this->pdo->lastInsertId();
     }
 
@@ -34,11 +34,11 @@ class Job
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks)
+    public function updateJob($id, $title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities)
     {
 
-        $stmt = $this->pdo->prepare("UPDATE jobs SET title = ?, description = ?, posting_type = ?, employment_type = ?, work_type = ?, skills = ?, job_location = ?, no_of_openings = ?, start_date = ?, duration = ?, who_can_apply = ?, stipend_salary = ?, perks = ? WHERE id = ?");
-        $stmt->execute([$title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $id]);
+        $stmt = $this->pdo->prepare("UPDATE jobs SET title = ?, description = ?, posting_type = ?, employment_type = ?, work_type = ?, skills = ?, job_location = ?, no_of_openings = ?, start_date = ?, duration = ?, who_can_apply = ?, stipend_salary = ?, perks = ?, age = ?, gender_preferred = ?, experience = ?, key_responsibilities = ? WHERE id = ?");
+        $stmt->execute([$title, $description, $posting_type, $employment_type, $work_type, $skills, $job_location, $no_of_openings, $start_date, $duration, $who_can_apply, $stipend_salary, $perks, $age, $gender_preferred, $experience, $key_responsibilities, $id]);
         return $stmt->rowCount();
     }
 
@@ -90,11 +90,12 @@ class Job
                     OR jobs.skills LIKE ?
                     OR jobs.job_location LIKE ?
                     OR companies.company_name LIKE ?
+                    OR jobs.experience LIKE ?  -- Include experience in search
                   )
                 ORDER BY jobs.created_at DESC";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+        $stmt->execute([$searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

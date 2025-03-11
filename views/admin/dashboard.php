@@ -16,6 +16,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
 <ul>
     <li><a href="<?php echo generate_url('views/admin/manage_users.php'); ?>">Manage Users</a></li>
     <li><a href="<?php echo generate_url('views/admin/manage_jobs.php'); ?>">Manage Jobs</a></li>
+    <li><a href="<?php echo generate_url('views/admin/post_job_as_company.php'); ?>">Post Job For Company</a></li>
 </ul>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
