@@ -46,6 +46,26 @@ $company = $companyModel->getCompanyByUserId($_SESSION['user_id']);
         <textarea id="company_description" name="company_description" rows="4"><?php echo ($company) ? html_escape($company['company_description']) : ''; ?></textarea>
     </div>
 
+    <div class="form-group">
+        <label for="industry">Industry:</label>
+        <input type="text" id="industry" name="industry" value="<?php echo ($company) ? html_escape($company['industry']) : ''; ?>">
+    </div>
+
+    <div class="form-group">
+        <label for="employee_count">Employee Count:</label>
+        <input type="number" id="employee_count" name="employee_count" value="<?php echo ($company) ? html_escape($company['employee_count']) : ''; ?>">
+    </div>
+
+    <div class="form-group">
+        <label for="website_link">Website Link:</label>
+        <input type="text" id="website_link" name="website_link" value="<?php echo ($company) ? html_escape($company['website_link']) : ''; ?>">
+    </div>
+
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="<?php echo ($company) ? html_escape($company['location']) : ''; ?>">
+    </div>
+
     <button type="submit" class="btn"><?php echo ($company) ? 'Update Profile' : 'Create Profile'; ?></button>
 </form>
 

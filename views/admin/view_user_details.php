@@ -75,10 +75,22 @@ if ($user['user_type'] === 'company') {
         <dd><?php echo html_escape($company['company_name']); ?></dd>
 
         <dt>Company Logo:</dt>
-        <dd><img src="<?php echo generate_url($company['company_logo']); ?>" alt="<?php echo html_escape($company['company_name']); ?>" style="max-width: 100px;"></dd>
+        <dd> <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" style="max-width: 100px;"></dd>
 
         <dt>Company Description:</dt>
         <dd><?php echo html_escape($company['company_description']); ?></dd>
+
+        <dt>Industry:</dt>
+        <dd><?php echo html_escape($company['industry'] ?? 'N/A'); ?></dd>
+
+        <dt>Employee Count:</dt>
+        <dd><?php echo html_escape($company['employee_count'] ?? 'N/A'); ?></dd>
+
+        <dt>Website Link:</dt>
+        <dd><?php echo html_escape($company['website_link'] ?? 'N/A'); ?></dd>
+
+        <dt>Location:</dt>
+        <dd><?php echo html_escape($company['location'] ?? 'N/A'); ?></dd>
     </dl>
 <?php endif; ?>
 

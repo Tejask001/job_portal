@@ -52,7 +52,8 @@ function format_text($text)
 ?>
 
 <h1><?php echo html_escape($job['title']); ?></h1>
-<p class="company-name">Posted by: <?php echo html_escape($job['company_name']); ?></p>
+<p>Posted by: <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($job['company_id'])); ?>"><?php echo html_escape($job['company_name']); ?></a></p>
+
 
 <p><strong>Description:</strong></p>
 <p><?php echo html_escape($job['description']); ?></p>

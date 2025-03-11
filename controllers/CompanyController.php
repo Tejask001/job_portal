@@ -28,8 +28,16 @@ class CompanyController
         $this->pdo = $pdo;
     }
 
-    public function createCompany($user_id, $company_name, $company_logo, $company_description)
-    {
+    public function createCompany(
+        $user_id,
+        $company_name,
+        $company_logo,
+        $company_description,
+        $industry,
+        $employee_count,
+        $website_link,
+        $location
+    ) {
         // Validate input
         if (empty($company_name)) {
             $_SESSION['error_message'] = "Company name is required.";
@@ -37,7 +45,16 @@ class CompanyController
             return;
         }
 
-        $company_id = $this->companyModel->createCompany($user_id, $company_name, $company_logo, $company_description);
+        $company_id = $this->companyModel->createCompany(
+            $user_id,
+            $company_name,
+            $company_logo,
+            $company_description,
+            $industry,
+            $employee_count,
+            $website_link,
+            $location
+        );
 
         if ($company_id) {
             $_SESSION['success_message'] = "Company profile created successfully!";
@@ -48,8 +65,16 @@ class CompanyController
         }
     }
 
-    public function updateCompanyProfile($id, $company_name, $company_logo, $company_description)
-    {
+    public function updateCompanyProfile(
+        $id,
+        $company_name,
+        $company_logo,
+        $company_description,
+        $industry,
+        $employee_count,
+        $website_link,
+        $location
+    ) {
         // Validate input
         if (empty($company_name)) {
             $_SESSION['error_message'] = "Company name is required.";
@@ -57,7 +82,16 @@ class CompanyController
             return;
         }
 
-        $updated = $this->companyModel->updateCompanyProfile($id, $company_name, $company_logo, $company_description);
+        $updated = $this->companyModel->updateCompanyProfile(
+            $id,
+            $company_name,
+            $company_logo,
+            $company_description,
+            $industry,
+            $employee_count,
+            $website_link,
+            $location
+        );
 
         if ($updated) {
             $_SESSION['success_message'] = "Company profile updated successfully!";
@@ -151,7 +185,11 @@ class CompanyController
                         $_POST['user_id'] ?? '',
                         $_POST['company_name'] ?? '',
                         $company_logo,
-                        $_POST['company_description'] ?? ''
+                        $_POST['company_description'] ?? '',
+                        $_POST['industry'] ?? '',
+                        $_POST['employee_count'] ?? '',
+                        $_POST['website_link'] ?? '',
+                        $_POST['location'] ?? ''
                     );
                     break;
                 case 'update_company_profile':
@@ -160,7 +198,11 @@ class CompanyController
                         $_POST['id'] ?? '',
                         $_POST['company_name'] ?? '',
                         $company_logo, // Pass the processed company_logo
-                        $_POST['company_description'] ?? ''
+                        $_POST['company_description'] ?? '',
+                        $_POST['industry'] ?? '',
+                        $_POST['employee_count'] ?? '',
+                        $_POST['website_link'] ?? '',
+                        $_POST['location'] ?? ''
                     );
                     break;
                 case 'update_application_status':
