@@ -44,26 +44,53 @@ if (!$application) {
 
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">View Job Application</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><i class="bi bi-person-circle"></i> View Job Application</h1>
+        <a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Applications
+        </a>
+    </div>
 
-    <div class="card">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Applicant Information</h4>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Applicant Information</h5>
-            <p><strong>Name:</strong> <?php echo html_escape($application['name']); ?></p>
-            <p><strong>Email:</strong> <?php echo html_escape($application['email']); ?></p>
-            <p><strong>Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
-            <p><strong>Why are you a fit:</strong> <?php echo html_escape($application['why_are_you_fit']); ?></p>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong><i class="bi bi-person"></i> Name:</strong> <?php echo html_escape($application['name']); ?></p>
+                    <p><strong><i class="bi bi-envelope"></i> Email:</strong>
+                        <a href="mailto:<?php echo html_escape($application['email']); ?>" class="text-decoration-none">
+                            <?php echo html_escape($application['email']); ?>
+                        </a>
+                    </p>
+                    <p><strong><i class="bi bi-telephone"></i> Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong><i class="bi bi-chat-text"></i> Why are you a fit?</strong></p>
+                    <p class="bg-light p-3 rounded border"><?php echo nl2br(html_escape($application['why_are_you_fit'])); ?></p>
+                </div>
+            </div>
 
-            <?php if ($application['resume_path']): ?>
-                <p><strong>Resume:</strong> <a href="<?php echo html_escape($application['resume_path']); ?>" target="_blank">View Resume</a></p>
-            <?php else: ?>
-                <p><strong>Resume:</strong> No resume provided.</p>
-            <?php endif; ?>
+            <hr>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <p>
+                    <strong><i class="bi bi-file-earmark-text"></i> Resume:</strong>
+                    <?php if ($application['resume_path']): ?>
+                        <a href="<?php echo generate_url($application['resume_path']); ?>" target="_blank" class="btn btn-success btn-sm">
+                            <i class="bi bi-eye"></i> View Resume
+                        </a>
+                    <?php else: ?>
+                        <span class="badge bg-danger">No resume provided</span>
+                    <?php endif; ?>
+                </p>
+            </div>
         </div>
     </div>
 
-    <a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn btn-secondary mt-3">Back to Applications</a>
 </div>
+
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

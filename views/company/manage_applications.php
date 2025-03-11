@@ -25,21 +25,25 @@ $companyController = new CompanyController($pdo);
 $applications = $companyController->getJobApplications($company['id']);
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">Manage Job Applications</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold"><i class="bi bi-clipboard-check"></i> Manage Job Applications</h1>
+    </div>
 
     <?php if (empty($applications)): ?>
-        <p class="alert alert-info">No applications received yet.</p>
+        <div class="alert alert-info text-center">
+            <i class="bi bi-exclamation-circle"></i> No applications received yet.
+        </div>
     <?php else: ?>
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark">
                     <tr>
-                        <th>Applicant Name</th>
-                        <th>Job Title</th>
-                        <th>Applied At</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th><i class="bi bi-person"></i> Applicant Name</th>
+                        <th><i class="bi bi-briefcase"></i> Job Title</th>
+                        <th><i class="bi bi-calendar"></i> Applied At</th>
+                        <th><i class="bi bi-info-circle"></i> Status</th>
+                        <th><i class="bi bi-gear"></i> Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,12 +52,29 @@ $applications = $companyController->getJobApplications($company['id']);
                             <td><?php echo html_escape($application['seeker_name']); ?></td>
                             <td><?php echo html_escape($application['title']); ?></td>
                             <td><?php echo html_escape($application['applied_at']); ?></td>
-                            <td><?php echo html_escape($application['application_status']); ?></td>
                             <td>
-                                <a href="<?php echo generate_url('views/company/view_application.php?application_id=' . html_escape($application['id'])); ?>" class="btn btn-info btn-sm">View Application</a>
-                                <?php if ($application['application_status'] === 'pending'): ?>
-                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=approved'); ?>" class="btn btn-success btn-sm">Approve</a>
-                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=rejected'); ?>" class="btn btn-danger btn-sm">Reject</a>
+                                <?php
+                                $status = strtolower($application['application_status']);
+                                $badgeClass = ($status === 'approved') ? 'bg-success' : (($status === 'rejected') ? 'bg-danger' : 'bg-warning text-dark');
+                                ?>
+                                <span class="badge <?php echo $badgeClass; ?> p-2">
+                                    <?php echo ucfirst($application['application_status']); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="<?php echo generate_url('views/company/view_application.php?application_id=' . html_escape($application['id'])); ?>"
+                                    class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye"></i> View Application
+                                </a>
+                                <?php if ($status === 'pending'): ?>
+                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=approved'); ?>"
+                                        class="btn btn-success btn-sm">
+                                        <i class="bi bi-check-circle"></i> Approve
+                                    </a>
+                                    <a href="<?php echo generate_url('controllers/CompanyController.php?action=update_application_status&application_id=' . html_escape($application['id']) . '&status=rejected'); ?>"
+                                        class="btn btn-danger btn-sm">
+                                        <i class="bi bi-x-circle"></i> Reject
+                                    </a>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -63,5 +84,6 @@ $applications = $companyController->getJobApplications($company['id']);
         </div>
     <?php endif; ?>
 </div>
+
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
