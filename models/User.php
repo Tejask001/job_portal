@@ -56,4 +56,29 @@ class User
         $stmt->execute([$id]);
         return $stmt->rowCount();
     }
+    // Add deleteUserAccount function here
+    public function deleteUserAccount($id)
+    {
+        try {
+            $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = ?");
+            $stmt->execute([$id]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Error deleting user account: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updatePassword($id, $new_password)
+    {
+        try {
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+            $stmt = $this->pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+            $stmt->execute([$hashed_password, $id]);
+            return $stmt->rowCount();
+        } catch (PDOException $e) {
+            error_log("Error updating password: " . $e->getMessage());
+            return false;
+        }
+    }
 }

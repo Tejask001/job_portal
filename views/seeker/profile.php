@@ -83,4 +83,9 @@ if (!$user) {
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
+
+<h2>Account Management</h2>
+<a href="<?php echo generate_url('views/seeker/update_password.php'); ?>" class="btn">Update Password</a>
+<a href="<?php echo generate_url('controllers/UserController.php?action=delete_account'); ?>" class="btn btn-delete" onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">Delete Account</a>
+
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

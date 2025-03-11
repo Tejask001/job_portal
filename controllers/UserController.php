@@ -241,6 +241,69 @@ class UserController
         return $this->notificationModel->getNotificationsByUserId($user_id);
     }
 
+    // Delete Account Function
+    public function deleteAccount($id)
+    {
+        // Additional security: You might want to require the user to re-enter their password before deleting the account.
+
+        $deleted = $this->userModel->deleteUserAccount($id);
+
+        if ($deleted) {
+            //Clear session and redirect to logout or home page
+            session_unset();
+            session_destroy();
+            $_SESSION['success_message'] = "Account deleted successfully!";
+            redirect('/job_portal/index.php'); // Redirect to homepage or a "goodbye" page
+        } else {
+            $_SESSION['error_message'] = "Failed to delete account.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/profile.php');
+        }
+    }
+    //Update Password function
+    public function updatePassword($id, $old_password, $new_password, $confirm_password)
+    {
+        //Verify new passwords match
+        if ($new_password !== $confirm_password) {
+            $_SESSION['error_message'] = "New passwords do not match.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/update_password.php');
+            return;
+        }
+
+        //Get the user from the database
+        $user = $this->userModel->getUserById($id);
+
+        //verify that the user exist
+        if (!$user) {
+            $_SESSION['error_message'] = "User not found.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/update_password.php');
+            return;
+        }
+
+        //verify current password
+        if (!password_verify($old_password, $user['password'])) {
+            $_SESSION['error_message'] = "Incorrect old password.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/update_password.php');
+            return;
+        }
+
+        //verify the length of the new password
+        if (strlen($new_password) < 8) {
+            $_SESSION['error_message'] = "New password must be at least 8 characters long.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/update_password.php');
+            return;
+        }
+        $updated = $this->userModel->updatePassword($id, $new_password);
+
+        if ($updated) {
+            $_SESSION['success_message'] = "Password updated successfully!";
+            redirect('/job_portal/views/seeker/profile.php');
+        } else {
+            $_SESSION['error_message'] = "Failed to update password.";
+            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/seeker/update_password.php');
+        }
+    }
+
+
     // Handle requests based on the 'action' parameter
     public function handleRequest()
     {
@@ -277,6 +340,18 @@ class UserController
                     break;
                 case 'withdraw_application':
                     $this->withdrawApplication($_GET['id'] ?? '');
+                    break;
+                case 'delete_account':
+                    $this->deleteAccount($_SESSION['user_id'] ?? '');
+                    break;
+                case 'update_password':
+                    $this->updatePassword(
+                        $_POST['id'] ?? '',
+                        $_POST['old_password'] ?? '',
+                        $_POST['new_password'] ?? '',
+                        $_POST['confirm_password'] ?? ''
+                    );
+                    break;
                 default:
                     // Invalid action
                     echo "Invalid action."; //Or redirect to homepage
