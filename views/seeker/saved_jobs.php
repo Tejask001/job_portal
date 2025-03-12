@@ -15,7 +15,7 @@ $savedJobs = $userController->getSavedJobsByUserId($_SESSION['user_id']);
 ?>
 
 <div class="container-fluid bg-light py-5">
-    <div class="container">
+    <div class="container bg-light">
         <h1 class="mb-4"><i class="bi bi-bookmark-heart-fill me-2"></i> My Saved Jobs</h1>
 
         <?php if (empty($savedJobs)): ?>
