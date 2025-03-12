@@ -44,53 +44,54 @@ if (!$application) {
 
 ?>
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold"><i class="bi bi-person-circle"></i> View Job Application</h1>
-        <a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Back to Applications
-        </a>
-    </div>
-
-    <div class="card shadow-lg border-0">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Applicant Information</h4>
+<div class="container-fluid bg-light py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="fw-bold"><i class="bi bi-person-circle me-2"></i> View Job Application</h1>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong><i class="bi bi-person"></i> Name:</strong> <?php echo html_escape($application['name']); ?></p>
-                    <p><strong><i class="bi bi-envelope"></i> Email:</strong>
-                        <a href="mailto:<?php echo html_escape($application['email']); ?>" class="text-decoration-none">
-                            <?php echo html_escape($application['email']); ?>
-                        </a>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0"><i class="bi bi-info-circle me-1"></i> Applicant Information</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-person me-1"></i> Name:</strong> <?php echo html_escape($application['name']); ?></p>
+                        <p><strong><i class="bi bi-envelope me-1"></i> Email:</strong>
+                            <a href="mailto:<?php echo html_escape($application['email']); ?>" class="text-decoration-none">
+                                <?php echo html_escape($application['email']); ?>
+                            </a>
+                        </p>
+                        <p><strong><i class="bi bi-telephone me-1"></i> Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong><i class="bi bi-chat-text me-1"></i> Why are you a fit?</strong></p>
+                        <div class="bg-light p-3 rounded border">
+                            <?php echo nl2br(html_escape($application['why_are_you_fit'])); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <p>
+                        <strong><i class="bi bi-file-earmark-text me-1"></i> Resume:</strong>
+                        <?php if ($application['resume_path']): ?>
+                            <a href="<?php echo generate_url($application['resume_path']); ?>" target="_blank" class="btn btn-success btn-sm">
+                                <i class="bi bi-eye me-1"></i> View Resume
+                            </a>
+                        <?php else: ?>
+                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i> No resume provided</span>
+                        <?php endif; ?>
                     </p>
-                    <p><strong><i class="bi bi-telephone"></i> Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
                 </div>
-                <div class="col-md-6">
-                    <p><strong><i class="bi bi-chat-text"></i> Why are you a fit?</strong></p>
-                    <p class="bg-light p-3 rounded border"><?php echo nl2br(html_escape($application['why_are_you_fit'])); ?></p>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="d-flex justify-content-between align-items-center">
-                <p>
-                    <strong><i class="bi bi-file-earmark-text"></i> Resume:</strong>
-                    <?php if ($application['resume_path']): ?>
-                        <a href="<?php echo generate_url($application['resume_path']); ?>" target="_blank" class="btn btn-success btn-sm">
-                            <i class="bi bi-eye"></i> View Resume
-                        </a>
-                    <?php else: ?>
-                        <span class="badge bg-danger">No resume provided</span>
-                    <?php endif; ?>
-                </p>
             </div>
         </div>
+
+        <!-- Add Application Status Update Section Here -->
     </div>
-
 </div>
-
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
