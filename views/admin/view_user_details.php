@@ -191,8 +191,6 @@ if ($user['user_type'] === 'company' && $company) {
                                 <p class="card-text">
                                     <i class="bi bi-tag"></i> <strong>Opportunity Type:</strong> <?php echo formatText($job['posting_type']); ?><br>
                                     <i class="bi bi-clock"></i> <strong>Employment Status:</strong> <?php echo formatText($job['employment_type']); ?><br>
-                                    <i class="bi bi-diagram-3"></i> <strong>Work Arrangement:</strong> <?php echo formatText($job['work_type']); ?><br>
-                                    <i class="bi bi-person-bounding-box"></i> <strong>Age:</strong> <?php echo html_escape($job['age']); ?><br>
                                     <i class="bi bi-stars"></i> <strong>Experience:</strong> <?php echo html_escape($job['experience']); ?><br>
                                     <i class="bi bi-card-text"></i> <?php echo substr(html_escape($job['description']), 0, 100); ?>...<br>
                                     <i class="bi bi-geo-alt"></i> <strong>Location:</strong> <?php echo html_escape($job['job_location']); ?>
