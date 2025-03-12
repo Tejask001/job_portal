@@ -51,56 +51,97 @@ function format_text($text)
 }
 ?>
 
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title"><?php echo html_escape($job['title']); ?></h1>
-            <h6 class="card-subtitle mb-2 text-muted">
-                Posted by:
-                <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($job['company_id'])); ?>">
-                    <?php echo html_escape($job['company_name']); ?>
-                </a>
-            </h6>
+<div class="container-fluid bg-light py-5">
+    <div class="container bg-light">
+        <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-body">
+                <h1 class="card-title"><i class="bi bi-briefcase me-2"></i> <?php echo html_escape($job['title']); ?></h1>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <i class="bi bi-building me-1"></i> Posted by:
+                    <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($job['company_id'])); ?>" class="text-decoration-none">
+                        <?php echo html_escape($job['company_name']); ?>
+                    </a>
+                </h6>
 
-            <hr>
+                <hr>
 
-            <h5 class="mt-3">Description</h5>
-            <p class="card-text"><?php echo html_escape($job['description']); ?></p>
+                <h5 class="mt-3"><i class="bi bi-card-text me-1"></i> Description</h5>
+                <p class="card-text"><?php echo html_escape($job['description']); ?></p>
 
-            <ul class="list-unstyled">
-                <li><strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?></li>
-                <li><strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?></li>
-                <li><strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?></li>
-                <li><strong>Job Location:</strong> <?php echo html_escape($job['job_location']); ?></li>
-                <li><strong>Skills Required:</strong> <?php echo html_escape($job['skills']); ?></li>
-                <li><strong>Number of Openings:</strong> <?php echo html_escape($job['no_of_openings']); ?></li>
-                <li><strong>Start Date:</strong> <?php echo html_escape($job['start_date']); ?></li>
-                <li><strong>Stipend/Salary:</strong> <?php echo html_escape($job['stipend_salary']); ?></li>
-                <li><strong>Perks:</strong> <?php echo html_escape($job['perks']); ?></li>
-                <li><strong>Age:</strong> <?php echo html_escape($job['age']); ?></li>
-                <li><strong>Gender Preferred:</strong> <?php echo format_text($job['gender_preferred']); ?></li>
-                <li><strong>Experience:</strong> <?php echo html_escape($job['experience']); ?></li>
-            </ul>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-tag me-1"></i> <strong>Opportunity Type:</strong> <?php echo format_text($job['posting_type']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-clock me-1"></i> <strong>Employment Status:</strong> <?php echo format_text($job['employment_type']); ?>
+                    </div>
+                </div>
 
-            <h5 class="mt-3">Key Responsibilities</h5>
-            <p class="card-text"><?php echo nl2br(html_escape($job['key_responsibilities'])); ?></p>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-diagram-3 me-1"></i> <strong>Work Arrangement:</strong> <?php echo format_text($job['work_type']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-geo-alt me-1"></i> <strong>Job Location:</strong> <?php echo html_escape($job['job_location']); ?>
+                    </div>
+                </div>
 
-            <div class="mt-4">
-                <?php if ($is_seeker): ?>
-                    <?php if ($is_saved): ?>
-                        <a href="<?php echo generate_url('controllers/UserController.php?action=unsave_job&job_id=' . $job_id); ?>" class="btn btn-secondary">Unsave Job</a>
-                    <?php else: ?>
-                        <a href="<?php echo generate_url('controllers/UserController.php?action=save_job&job_id=' . $job_id); ?>" class="btn btn-primary">Save Job</a>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-tools me-1"></i> <strong>Skills Required:</strong> <?php echo html_escape($job['skills']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-hash me-1"></i> <strong>Number of Openings:</strong> <?php echo html_escape($job['no_of_openings']); ?>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-calendar-date me-1"></i> <strong>Start Date:</strong> <?php echo html_escape($job['start_date']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-cash-coin me-1"></i> <strong>Stipend/Salary:</strong> <?php echo html_escape($job['stipend_salary']); ?>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-gift me-1"></i> <strong>Perks:</strong> <?php echo html_escape($job['perks']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-person-bounding-box me-1"></i> <strong>Age:</strong> <?php echo html_escape($job['age']); ?>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="bi bi-gender-ambiguous me-1"></i> <strong>Gender Preferred:</strong> <?php echo format_text($job['gender_preferred']); ?>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="bi bi-stars me-1"></i> <strong>Experience:</strong> <?php echo html_escape($job['experience']); ?>
+                    </div>
+                </div>
+
+                <h5 class="mt-3"><i class="bi bi-list-task me-1"></i> Key Responsibilities</h5>
+                <p class="card-text"><?php echo nl2br(html_escape($job['key_responsibilities'])); ?></p>
+
+                <div class="mt-4">
+                    <?php if ($is_seeker): ?>
+                        <?php if ($is_saved): ?>
+                            <a href="<?php echo generate_url('controllers/UserController.php?action=unsave_job&job_id=' . $job_id); ?>" class="btn btn-warning me-2"><i class="bi bi-bookmark-dash me-1"></i> Unsave Job</a>
+                        <?php else: ?>
+                            <a href="<?php echo generate_url('controllers/UserController.php?action=save_job&job_id=' . $job_id); ?>" class="btn btn-primary me-2"><i class="bi bi-bookmark-plus me-1"></i> Save Job</a>
+                        <?php endif; ?>
+
+                        <?php if ($job['positions_filled'] >= $job['no_of_openings']): ?>
+                            <div class="alert alert-warning mt-3" role="alert"><i class="bi bi-exclamation-triangle me-2"></i> This job has been filled.</div>
+                        <?php elseif (!$has_applied): ?>
+                            <a href="<?php echo generate_url('views/jobs/apply.php?id=' . $job['id']); ?>" class="btn btn-success"><i class="bi bi-check-circle me-1"></i> Apply Now</a>
+                        <?php else: ?>
+                            <div class="alert alert-info mt-3" role="alert"><i class="bi bi-info-circle me-2"></i> You have already applied for this job.</div>
+                        <?php endif; ?>
                     <?php endif; ?>
-
-                    <?php if ($job['positions_filled'] >= $job['no_of_openings']): ?>
-                        <p class="alert alert-warning">This job has been filled.</p>
-                    <?php elseif (!$has_applied): ?>
-                        <a href="<?php echo generate_url('views/jobs/apply.php?id=' . $job['id']); ?>" class="btn btn-success">Apply Now</a>
-                    <?php else: ?>
-                        <p class="alert alert-info">You have already applied for this job.</p>
-                    <?php endif; ?>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>

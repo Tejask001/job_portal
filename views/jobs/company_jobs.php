@@ -30,25 +30,27 @@ $jobs = $jobModel->getJobsByCompanyId($company_id);
 $page_title = "Jobs at " . $company['company_name']; //Dynamic title update
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">Jobs at <?php echo html_escape($company['company_name']); ?></h1>
+<div class="container-fluid bg-light py-5">
+    <div class="container">
+        <h1 class="mb-4"><i class="bi bi-building me-2"></i> Jobs at <?php echo html_escape($company['company_name']); ?></h1>
 
-    <?php if (empty($jobs)): ?>
-        <p class="alert alert-info">No jobs found for this company.</p>
-    <?php else: ?>
-        <ul class="list-group">
-            <?php foreach ($jobs as $job): ?>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>">
-                        <?php echo html_escape($job['title']); ?>
+        <?php if (empty($jobs)): ?>
+            <div class="alert alert-info" role="alert"><i class="bi bi-info-circle me-2"></i> No jobs found for this company.</div>
+        <?php else: ?>
+            <div class="list-group">
+                <?php foreach ($jobs as $job): ?>
+                    <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-1"><i class="bi bi-file-earmark-text me-1"></i> <?php echo html_escape($job['title']); ?></h6>
+                        </div>
+                        <span class="badge bg-primary rounded-pill"><i class="bi bi-geo-alt me-1"></i> <?php echo html_escape($job['job_location']); ?></span>
                     </a>
-                    <span class="badge bg-primary rounded-pill"><?php echo html_escape($job['job_location']); ?></span>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
-    <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($company_id)); ?>" class="btn btn-secondary mt-3">Back to Company Details</a>
+        <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($company_id)); ?>" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left me-1"></i> Back to Company Details</a>
+    </div>
 </div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
