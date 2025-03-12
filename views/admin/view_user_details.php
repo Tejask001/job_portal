@@ -9,6 +9,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
     exit();
 }
 
+// Function to format text (capitalize first letter of each word)
+function formatText($text)
+{
+    if ($text === null || $text === 'N/A') {
+        return 'N/A';
+    }
+    return ucwords(strtolower(html_escape($text)));
+}
+
 // Get the user ID from the query string
 $user_id = isset($_GET['id']) ? $_GET['id'] : null;
 
@@ -35,78 +44,82 @@ if ($user['user_type'] === 'company') {
 }
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">User Details</h1>
+<div class="container-fluid bg-light py-5">
+    <div class="container">
+        <h1 class="mb-4"><i class="bi bi-person-lines-fill me-2"></i> User/Company Details</h1>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">User Information</h5>
-            <dl class="row">
-                <dt class="col-sm-3">ID:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['id']); ?></dd>
-
-                <dt class="col-sm-3">User Type:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['user_type']); ?></dd>
-
-                <dt class="col-sm-3">Name:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['name']); ?></dd>
-
-                <dt class="col-sm-3">Email:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['email']); ?></dd>
-
-                <?php if ($user['user_type'] === 'seeker'): ?>
-                    <dt class="col-sm-3">Age:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($user['age'] ?? 'N/A'); ?></dd>
-
-                    <dt class="col-sm-3">Gender:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($user['gender'] ?? 'N/A'); ?></dd>
-
-                    <dt class="col-sm-3">Experience:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($user['experience'] ?? 'N/A'); ?></dd>
-                <?php endif; ?>
-
-                <dt class="col-sm-3">Created At:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['created_at']); ?></dd>
-
-                <dt class="col-sm-3">Updated At:</dt>
-                <dd class="col-sm-9"><?php echo html_escape($user['updated_at']); ?></dd>
-            </dl>
-        </div>
-    </div>
-
-    <?php if ($company): ?>
-        <div class="card">
+        <div class="card shadow-lg border-0 rounded-lg mb-4">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="card-title mb-0"><i class="bi bi-person-fill me-1"></i> User Information</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">Company Details</h5>
                 <dl class="row">
-                    <dt class="col-sm-3">Company Name:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['company_name']); ?></dd>
+                    <dt class="col-sm-3"><i class="bi bi-hash me-1"></i> ID:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['id']); ?></dd>
 
-                    <dt class="col-sm-3">Company Logo:</dt>
-                    <dd class="col-sm-9">
-                        <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" class="img-fluid" style="max-width: 100px;">
-                    </dd>
+                    <dt class="col-sm-3"><i class="bi bi-person-badge-fill me-1"></i> User Type:</dt>
+                    <dd class="col-sm-9"><?php echo formatText($user['user_type']); ?></dd>
 
-                    <dt class="col-sm-3">Company Description:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['company_description']); ?></dd>
+                    <dt class="col-sm-3"><i class="bi bi-person-circle me-1"></i> Name:</dt>
+                    <dd class="col-sm-9"><?php echo formatText($user['name']); ?></dd>
 
-                    <dt class="col-sm-3">Industry:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['industry'] ?? 'N/A'); ?></dd>
+                    <dt class="col-sm-3"><i class="bi bi-envelope-fill me-1"></i> Email:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['email']); ?></dd>
 
-                    <dt class="col-sm-3">Employee Count:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['employee_count'] ?? 'N/A'); ?></dd>
+                    <?php if ($user['user_type'] === 'seeker'): ?>
+                        <dt class="col-sm-3"><i class="bi bi-calendar-date me-1"></i> Age:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($user['age'] ?? 'N/A'); ?></dd>
 
-                    <dt class="col-sm-3">Website Link:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['website_link'] ?? 'N/A'); ?></dd>
+                        <dt class="col-sm-3"><i class="bi bi-gender-ambiguous me-1"></i> Gender:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($user['gender'] ?? 'N/A'); ?></dd>
 
-                    <dt class="col-sm-3">Location:</dt>
-                    <dd class="col-sm-9"><?php echo html_escape($company['location'] ?? 'N/A'); ?></dd>
+                        <dt class="col-sm-3"><i class="bi bi-briefcase-fill me-1"></i> Experience:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($user['experience'] ?? 'N/A'); ?></dd>
+                    <?php endif; ?>
+
+                    <dt class="col-sm-3"><i class="bi bi-clock-fill me-1"></i> Created At:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['created_at']); ?></dd>
+
+                    <dt class="col-sm-3"><i class="bi bi-arrow-clockwise me-1"></i> Updated At:</dt>
+                    <dd class="col-sm-9"><?php echo html_escape($user['updated_at']); ?></dd>
                 </dl>
             </div>
         </div>
-    <?php endif; ?>
 
-    <a href="<?php echo generate_url('views/admin/manage_users.php'); ?>" class="btn btn-secondary mt-3">Back to Manage Users</a>
+        <?php if ($company): ?>
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-success text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-building me-1"></i> Company Details</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3"><i class="bi bi-building-fill me-1"></i> Company Name:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($company['company_name']); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-image-fill me-1"></i> Company Logo:</dt>
+                        <dd class="col-sm-9">
+                            <img src="<?php echo generate_url($company['company_logo']); ?>" alt="Company Logo" class="img-fluid rounded" style="max-width: 150px;">
+                        </dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-card-text me-1"></i> Company Description:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($company['company_description']); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-list-stars me-1"></i> Industry:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($company['industry'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-people-fill me-1"></i> Employee Count:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($company['employee_count'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-link-45deg me-1"></i> Website Link:</dt>
+                        <dd class="col-sm-9"><a href="<?php echo html_escape($company['website_link'] ?? '#'); ?>" target="_blank" rel="noopener noreferrer"><?php echo html_escape($company['website_link'] ?? 'N/A'); ?></a></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-geo-alt-fill me-1"></i> Location:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($company['location'] ?? 'N/A'); ?></dd>
+                    </dl>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

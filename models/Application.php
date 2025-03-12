@@ -39,11 +39,24 @@ class Application
 
     public function getAllJobApplications()
     {
-        $stmt = $this->pdo->prepare("SELECT job_applications.*, jobs.title, users.name as seeker_name, users.email as seeker_email
-                                    FROM job_applications
-                                    JOIN jobs ON job_applications.job_id = jobs.id
-                                    JOIN users ON job_applications.user_id = users.id
-                                    ORDER BY job_applications.applied_at DESC");
+        $stmt = $this->pdo->prepare("
+            SELECT
+                job_applications.*,
+                jobs.title,
+                users.name AS seeker_name,
+                users.email AS seeker_email,
+                companies.company_name
+            FROM
+                job_applications
+            JOIN
+                jobs ON job_applications.job_id = jobs.id
+            JOIN
+                users ON job_applications.user_id = users.id
+            JOIN
+                companies ON jobs.company_id = companies.id  -- Crucial JOIN here
+            ORDER BY
+                job_applications.applied_at DESC
+        ");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
