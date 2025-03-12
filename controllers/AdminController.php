@@ -129,7 +129,15 @@ class AdminController
 
     public function getUserDetails($user_id)
     {
-        return $this->userModel->getUserById($user_id);
+        $user = $this->userModel->getUserById($user_id);
+
+        if ($user) {
+            // If the user is found, return the details
+            return $user;
+        } else {
+            // If the user is not found, return a default response
+            return ['name' => 'User not found', 'email' => 'N/A', 'age' => 'N/A', 'gender' => 'N/A', 'experience' => 'N/A'];
+        }
     }
 
     // Add new cases to the switch statement inside the handleRequest function

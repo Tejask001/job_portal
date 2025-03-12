@@ -28,7 +28,14 @@ if (!$user_id) {
 }
 
 require_once __DIR__ . '/../../controllers/AdminController.php';
+require_once __DIR__ . '/../../controllers/CompanyController.php'; // Include Company Controller
+require_once __DIR__ . '/../../controllers/UserController.php';
+require_once __DIR__ . '/../../controllers/JobController.php';
+
 $adminController = new AdminController($pdo);
+$companyController = new CompanyController($pdo); // Instantiate Company Controller
+$userController = new UserController($pdo); // Instantiate the UserController
+$jobController = new JobController($pdo);
 $user = $adminController->getUserDetails($user_id);
 
 if (!$user) {
@@ -41,6 +48,19 @@ if (!$user) {
 $company = null;
 if ($user['user_type'] === 'company') {
     $company = $adminController->getCompanyDetailsById($user_id); // New method call
+}
+
+// Retrieve applications if the user is a seeker
+$seekerApplications = null;
+if ($user['user_type'] === 'seeker') {
+    $seekerApplications = $userController->getApplicationsByUserId($user_id);
+}
+
+// Retrieve applications if the user is a company
+$companyApplications = null;
+if ($user['user_type'] === 'company' && $company) {
+    // Retrieve applications for the company using the CompanyController
+    $companyApplications = $jobController->getJobsByCompanyId($company['id']);
 }
 ?>
 
@@ -117,6 +137,71 @@ if ($user['user_type'] === 'company') {
                         <dd class="col-sm-9"><?php echo formatText($company['location'] ?? 'N/A'); ?></dd>
                     </dl>
                 </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($user['user_type'] === 'seeker' && $seekerApplications): ?>
+            <h2 class="mt-5"><i class="bi bi-file-earmark-text me-2"></i> Applications</h2>
+            <div class="row">
+                <?php foreach ($seekerApplications as $application): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-briefcase-fill me-1"></i> <?php echo html_escape($application['title']); ?></h5>
+                                <p class="card-text"><i class="bi bi-calendar-check me-1"></i> Applied at: <?php echo date("M d, Y", strtotime($application['applied_at'])); ?></p>
+
+                                <!-- Add Job Details Link -->
+                                <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($application['job_id'])); ?>" class="btn btn-outline-info btn-sm me-2"><i class="bi bi-info-circle me-1"></i> Job Details</a>
+                                <a href="<?php echo generate_url('views/admin/view_application.php?application_id=' . html_escape($application['id'])); ?>" class="btn btn-primary btn-sm"><i class="bi bi-eye-fill me-1"></i> View Application</a>
+                            </div>
+                            <div class="card-footer">
+                                <?php
+                                $statusClass = '';
+                                switch ($application['application_status']) {
+                                    case 'pending':
+                                        $statusClass = 'bg-warning text-dark';
+                                        break;
+                                    case 'approved':
+                                        $statusClass = 'bg-success';
+                                        break;
+                                    case 'rejected':
+                                        $statusClass = 'bg-danger';
+                                        break;
+                                    default:
+                                        $statusClass = 'bg-secondary';
+                                        break;
+                                }
+                                ?>
+                                <span class="badge <?php echo $statusClass; ?>"><i class="bi bi-info-circle me-1"></i> <?php echo formatText($application['application_status']); ?></span>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($user['user_type'] === 'company' && $companyApplications): ?>
+            <h2 class="mt-5"><i class="bi bi-file-earmark-text me-2"></i> Jobs Posted by Company</h2>
+            <div class="row">
+                <?php foreach ($companyApplications as $job): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="bi bi-briefcase-fill me-1"></i> <?php echo html_escape($job['title']); ?></h5>
+                                <p class="card-text">
+                                    <i class="bi bi-tag"></i> <strong>Opportunity Type:</strong> <?php echo formatText($job['posting_type']); ?><br>
+                                    <i class="bi bi-clock"></i> <strong>Employment Status:</strong> <?php echo formatText($job['employment_type']); ?><br>
+                                    <i class="bi bi-diagram-3"></i> <strong>Work Arrangement:</strong> <?php echo formatText($job['work_type']); ?><br>
+                                    <i class="bi bi-person-bounding-box"></i> <strong>Age:</strong> <?php echo html_escape($job['age']); ?><br>
+                                    <i class="bi bi-stars"></i> <strong>Experience:</strong> <?php echo html_escape($job['experience']); ?><br>
+                                    <i class="bi bi-card-text"></i> <?php echo substr(html_escape($job['description']), 0, 100); ?>...<br>
+                                    <i class="bi bi-geo-alt"></i> <strong>Location:</strong> <?php echo html_escape($job['job_location']); ?>
+                                </p>
+                                <a href="<?php echo generate_url('views/jobs/job_details.php?id=' . html_escape($job['id'])); ?>" class="btn btn-primary"><i class="bi bi-eye"></i> View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>
