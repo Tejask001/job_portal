@@ -114,7 +114,7 @@ function format_text($text)
         <?php else: ?>
             <div class="row">
                 <?php foreach ($jobs as $job): ?>
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow">
                             <div class="card-body">
                                 <h5 class="card-title"><i class="bi bi-file-earmark-text"></i> <?php echo html_escape($job['title']); ?></h5>

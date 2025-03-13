@@ -43,7 +43,7 @@
         <hr class="border-secondary">
 
         <div class="text-center">
-            <p class="mb-0"><i class="bi bi-c-circle me-1"></i> © <?php echo date('Y'); ?> All rights reserved</p>
+            <p class="mb-0"><i class="bi bi-c-circle me-1"></i><?php echo date('Y'); ?> All rights reserved</p>
         </div>
     </div>
 </footer>

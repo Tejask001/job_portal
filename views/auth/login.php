@@ -22,7 +22,7 @@ include __DIR__ . '/../layouts/header.php';
                                 <input class="form-control" id="password" type="password" name="password" placeholder="Enter your password" required />
                             </div>
                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                <a class="small" href="#">Forgot Password?</a> <!-- Replace with your forgot password link -->
+                                <!--  <a class="small" href="#">Forgot Password?</a> -->
                                 <button type="submit" class="btn btn-primary"><i class="bi bi-arrow-right-circle me-1"></i> Login</button>
                             </div>
                         </form>

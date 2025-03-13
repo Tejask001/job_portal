@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                     <i class="bi bi-people fs-1 text-primary mb-3"></i>
                                     <h5 class="card-title fw-bold">Manage Users</h5>
-                                    <p class="card-text text-muted">View, edit, and manage user accounts.</p>
+                                    <p class="card-text text-muted">View and manage user accounts.</p>
                                     <a href="<?php echo generate_url('views/admin/manage_users.php'); ?>" class="btn btn-primary w-100">
                                         <i class="bi bi-arrow-right me-1"></i> Go to Manage Users
                                     </a>
@@ -39,7 +39,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin') {
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                                     <i class="bi bi-briefcase fs-1 text-success mb-3"></i>
                                     <h5 class="card-title fw-bold">Manage Jobs</h5>
-                                    <p class="card-text text-muted">Control job listings and their details.</p>
+                                    <p class="card-text text-muted">Control job listings</p>
                                     <a href="<?php echo generate_url('views/admin/manage_jobs.php'); ?>" class="btn btn-success w-100">
                                         <i class="bi bi-arrow-right me-1"></i> Go to Manage Jobs
                                     </a>

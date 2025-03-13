@@ -19,7 +19,11 @@ if (!$job_id) {
 }
 
 require_once __DIR__ . '/../../models/Job.php';
+require_once __DIR__ . '/../../models/User.php';
 $jobModel = new Job($pdo);
+$userModel = new User($pdo); // Instatiate User Model
+$user = $userModel->getUserById($_SESSION['user_id']);  //Get User By id so its available for use
+
 $job = $jobModel->getJobById($job_id);
 
 if (!$job) {
@@ -46,17 +50,37 @@ $resumes = $userController->getResumesByUserId($_SESSION['user_id']);
 
                     <div class="mb-3">
                         <label for="name" class="form-label"><i class="bi bi-person me-1"></i> Your Name:</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="<?php echo html_escape($user['name']); ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="email" class="form-label"><i class="bi bi-envelope me-1"></i> Your Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" value="<?php echo html_escape($user['email']); ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="phone" class="form-label"><i class="bi bi-telephone me-1"></i> Your Phone:</label>
                         <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter your phone number (optional)">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="age" class="form-label"><i class="bi bi-calendar-date me-1"></i> Your Age:</label>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="gender" class="form-label"><i class="bi bi-gender-ambiguous me-1"></i> Your Gender:</label>
+                        <select class="form-select" id="gender" name="gender">
+                            <option value="">Select Gender</option>
+                            <option value="male" <?php echo ($user['gender'] === 'male') ? 'selected' : '' ?>>Male</option>
+                            <option value="female" <?php echo ($user['gender'] === 'female') ? 'selected' : '' ?>>Female</option>
+                            <option value="other" <?php echo ($user['gender'] === 'other') ? 'selected' : '' ?>>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="experience" class="form-label"><i class="bi bi-briefcase me-1"></i> Your Experience:</label>
+                        <input type="text" class="form-control" id="experience" name="experience" placeholder="Enter your experience">
                     </div>
 
                     <div class="mb-3">

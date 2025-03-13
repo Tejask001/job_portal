@@ -65,6 +65,9 @@ if (!$application) {
                         </p>
                         <p><strong><i class="bi bi-telephone me-1"></i> Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
                     </div>
+                    <p><strong><i class="bi bi-calendar-date me-1"></i> Age:</strong> <?php echo html_escape($application['age']); ?></p>
+                    <p><strong><i class="bi bi-gender-ambiguous me-1"></i> Gender:</strong> <?php echo html_escape($application['gender']); ?></p>
+                    <p><strong><i class="bi bi-briefcase me-1"></i> Experience:</strong> <?php echo html_escape($application['experience']); ?></p>
                     <div class="col-md-6">
                         <p><strong><i class="bi bi-chat-text me-1"></i> Why are you a fit?</strong></p>
                         <div class="bg-light p-3 rounded border">

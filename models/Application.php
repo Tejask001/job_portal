@@ -9,10 +9,10 @@ class Application
         $this->pdo = $pdo;
     }
 
-    public function createApplication($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit)
+    public function createApplication($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit, $age = null, $gender = null, $experience = null)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO job_applications (job_id, user_id, name, email, phone, resume_path, why_are_you_fit) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit]);
+        $stmt = $this->pdo->prepare("INSERT INTO job_applications (job_id, user_id, name, email, phone, resume_path, why_are_you_fit, age, gender, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit, $age, $gender, $experience]);
         return $this->pdo->lastInsertId();
     }
 
@@ -53,7 +53,9 @@ class Application
             JOIN
                 users ON job_applications.user_id = users.id
             JOIN
-                companies ON jobs.company_id = companies.id  -- Crucial JOIN here
+                companies ON jobs.company_id = companies.id
+            WHERE
+                jobs.admin_approval = 1
             ORDER BY
                 job_applications.applied_at DESC
         ");
@@ -81,7 +83,7 @@ class Application
                                     FROM job_applications
                                     JOIN jobs ON job_applications.job_id = jobs.id
                                     JOIN users ON job_applications.user_id = users.id
-                                    WHERE jobs.company_id = ?
+                                    WHERE jobs.company_id = ? AND jobs.admin_approval = 1
                                     ORDER BY job_applications.applied_at DESC");
         $stmt->execute([$company_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

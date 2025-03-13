@@ -54,6 +54,9 @@ if (!$user) {
                 <p><i class="bi bi-person-fill me-1"></i> <strong>Name:</strong> <?php echo html_escape($application['name']); ?></p>
                 <p><i class="bi bi-envelope-fill me-1"></i> <strong>Email:</strong> <?php echo html_escape($application['email']); ?></p>
                 <p><i class="bi bi-telephone-fill me-1"></i> <strong>Phone:</strong> <?php echo html_escape($application['phone']); ?></p>
+                <p><strong><i class="bi bi-calendar-date me-1"></i> Age:</strong> <?php echo html_escape($application['age']); ?></p>
+                <p><strong><i class="bi bi-gender-ambiguous me-1"></i> Gender:</strong> <?php echo html_escape($application['gender']); ?></p>
+                <p><strong><i class="bi bi-briefcase me-1"></i> Experience:</strong> <?php echo html_escape($application['experience']); ?></p>
                 <p><i class="bi bi-question-circle-fill me-1"></i> <strong>Why are you a fit:</strong> <?php echo html_escape($application['why_are_you_fit']); ?></p>
 
                 <?php if ($application['resume_path']): ?>

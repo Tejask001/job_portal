@@ -78,7 +78,7 @@ class JobController
         redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/dashboard.php');
     }
 
-    public function applyForJob($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit)
+    public function applyForJob($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit, $age, $gender, $experience)
     {
         // Check if the user has already applied for this job
         var_dump($job_id, $user_id);
@@ -96,7 +96,7 @@ class JobController
             return;
         }
 
-        $application_id = $this->applicationModel->createApplication($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit);
+        $application_id = $this->applicationModel->createApplication($job_id, $user_id, $name, $email, $phone, $resume_path, $why_are_you_fit, $age, $gender, $experience);
 
         if ($application_id) {
             $_SESSION['success_message'] = "Application submitted successfully!";
@@ -183,7 +183,10 @@ class JobController
                         $_POST['email'] ?? '',
                         $_POST['phone'] ?? '',
                         $_POST['resume_path'] ?? '',
-                        $_POST['why_are_you_fit'] ?? ''
+                        $_POST['why_are_you_fit'] ?? '',
+                        $_POST['age'] ?? '',
+                        $_POST['gender'] ?? '',
+                        $_POST['experience'] ?? ''
                     );
                     break;
                 default:

@@ -181,7 +181,7 @@ class UserController
                                     FROM saved_jobs
                                     JOIN jobs ON saved_jobs.job_id = jobs.id
                                     JOIN companies ON jobs.company_id = companies.id
-                                    WHERE saved_jobs.user_id = ?
+                                    WHERE saved_jobs.user_id = ? AND jobs.admin_approval = 1
                                     ORDER BY saved_jobs.saved_at DESC");
             $stmt->execute([$user_id]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

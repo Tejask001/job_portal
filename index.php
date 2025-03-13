@@ -21,7 +21,7 @@ $jobs = $jobModel->getAllJobs(true, 10); // Get only approved jobs and limit to 
         <?php else: ?>
             <div class="row">
                 <?php foreach ($jobs as $job): ?>
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow">
                             <div class="card-body">
                                 <h5 class="card-title"><i class="bi bi-briefcase me-1"></i> <?php echo html_escape($job['title']); ?></h5>
