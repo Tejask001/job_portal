@@ -9,6 +9,7 @@ require_once __DIR__ . '/../models/Company.php';
 require_once __DIR__ . '/../models/Application.php';
 require_once __DIR__ . '/../models/Notification.php'; //Include noification model
 require_once __DIR__ . '/../models/Job.php';
+require_once __DIR__ . '/../models/CompanyContact.php'; //Include new model
 require_once __DIR__ . '/../config/functions.php'; // Include the functions file
 
 class CompanyController
@@ -17,6 +18,7 @@ class CompanyController
     private $applicationModel;
     private $notificationModel;
     private $jobModel;
+    private $companyContactModel; // New property
     private $pdo;
 
     public function __construct($pdo)
@@ -25,10 +27,11 @@ class CompanyController
         $this->applicationModel = new Application($pdo);
         $this->notificationModel = new Notification($pdo);
         $this->jobModel = new Job($pdo);
+        $this->companyContactModel = new CompanyContact($pdo); // Initialize new model
         $this->pdo = $pdo;
     }
 
-    public function createCompany(
+    public function saveCompanyProfile(
         $user_id,
         $company_name,
         $company_logo,
@@ -36,69 +39,104 @@ class CompanyController
         $industry,
         $employee_count,
         $website_link,
-        $location
+        $location,
+        $contact_name,
+        $contact_age,
+        $contact_gender,
+        $contact_email,
+        $contact_phone,
+        $contact_title,
+        $contact_department,
+        $id = null,  // Optional company ID for updates, nullable
+        $contact_id = null  // Optional contact ID for updates, nullable
     ) {
-        // Validate input
+
+        // Validate company input
         if (empty($company_name)) {
             $_SESSION['error_message'] = "Company name is required.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/company_profile.php');
             return;
         }
 
-        $company_id = $this->companyModel->createCompany(
-            $user_id,
-            $company_name,
-            $company_logo,
-            $company_description,
-            $industry,
-            $employee_count,
-            $website_link,
-            $location
-        );
-
-        if ($company_id) {
-            $_SESSION['success_message'] = "Company profile created successfully!";
-            redirect('/job_portal/views/company/dashboard.php');
-        } else {
-            $_SESSION['error_message'] = "Company profile creation failed. Please try again.";
-            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/company_profile.php');
-        }
-    }
-
-    public function updateCompanyProfile(
-        $id,
-        $company_name,
-        $company_logo,
-        $company_description,
-        $industry,
-        $employee_count,
-        $website_link,
-        $location
-    ) {
-        // Validate input
-        if (empty($company_name)) {
-            $_SESSION['error_message'] = "Company name is required.";
+        // Validate contact input (you can add more validation as needed)
+        if (empty($contact_name) || empty($contact_email)) {
+            $_SESSION['error_message'] = "Contact name and email are required.";
             redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/company_profile.php');
             return;
         }
 
-        $updated = $this->companyModel->updateCompanyProfile(
-            $id,
-            $company_name,
-            $company_logo,
-            $company_description,
-            $industry,
-            $employee_count,
-            $website_link,
-            $location
-        );
+        // Check if updating or creating
+        if ($id === null) { // Creating new company and contact
 
-        if ($updated) {
+            $company_id = $this->companyModel->createCompany(
+                $user_id,
+                $company_name,
+                $company_logo,
+                $company_description,
+                $industry,
+                $employee_count,
+                $website_link,
+                $location
+            );
+
+            if ($company_id) {
+                // Create Contact
+                $this->companyContactModel->createContact(
+                    $user_id,
+                    $contact_name,
+                    $contact_age,
+                    $contact_gender,
+                    $contact_email,
+                    $contact_phone,
+                    $contact_title,
+                    $contact_department
+                );
+                $_SESSION['success_message'] = "Company profile created successfully!";
+                redirect('/job_portal/views/company/dashboard.php');
+            } else {
+                $_SESSION['error_message'] = "Company profile creation failed. Please try again.";
+                redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/company_profile.php');
+            }
+        } else { // Updating existing company and/or contact
+            // Update Company
+            $updatedCompany = $this->companyModel->updateCompanyProfile(
+                $id,
+                $company_name,
+                $company_logo,
+                $company_description,
+                $industry,
+                $employee_count,
+                $website_link,
+                $location
+            );
+
+            //Update Contact, we do not know if the contact exists or not, so either way we use a try catch to see if we can update it
+            if ($contact_id) {
+                $this->companyContactModel->updateContact(
+                    $contact_id,
+                    $contact_name,
+                    $contact_age,
+                    $contact_gender,
+                    $contact_email,
+                    $contact_phone,
+                    $contact_title,
+                    $contact_department
+                );
+            } else {
+                $this->companyContactModel->createContact(
+                    $user_id,
+                    $contact_name,
+                    $contact_age,
+                    $contact_gender,
+                    $contact_email,
+                    $contact_phone,
+                    $contact_title,
+                    $contact_department
+                );
+            }
+
             $_SESSION['success_message'] = "Company profile updated successfully!";
             redirect('/job_portal/views/company/dashboard.php');
-        } else {
-            $_SESSION['error_message'] = "Company profile update failed. Please try again.";
-            redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/company/company_profile.php');
         }
     }
 
@@ -178,10 +216,10 @@ class CompanyController
             $action = $_GET['action'];
 
             switch ($action) {
-                case 'create_company':
+                case 'save_company_profile':
                     $company_logo = $this->handleLogoUpload();
 
-                    $this->createCompany(
+                    $this->saveCompanyProfile(
                         $_POST['user_id'] ?? '',
                         $_POST['company_name'] ?? '',
                         $company_logo,
@@ -189,20 +227,16 @@ class CompanyController
                         $_POST['industry'] ?? '',
                         $_POST['employee_count'] ?? '',
                         $_POST['website_link'] ?? '',
-                        $_POST['location'] ?? ''
-                    );
-                    break;
-                case 'update_company_profile':
-                    $company_logo = $this->handleLogoUpload();
-                    $this->updateCompanyProfile(
-                        $_POST['id'] ?? '',
-                        $_POST['company_name'] ?? '',
-                        $company_logo, // Pass the processed company_logo
-                        $_POST['company_description'] ?? '',
-                        $_POST['industry'] ?? '',
-                        $_POST['employee_count'] ?? '',
-                        $_POST['website_link'] ?? '',
-                        $_POST['location'] ?? ''
+                        $_POST['location'] ?? '',
+                        $_POST['contact_name'] ?? '',
+                        $_POST['contact_age'] ?? '',
+                        $_POST['contact_gender'] ?? '',
+                        $_POST['contact_email'] ?? '',
+                        $_POST['contact_phone'] ?? '',
+                        $_POST['contact_title'] ?? '',
+                        $_POST['contact_department'] ?? '',
+                        $_POST['id'] ?? null,  // company ID for update
+                        $_POST['contact_id'] ?? null //Contact ID for update
                     );
                     break;
                 case 'update_application_status':

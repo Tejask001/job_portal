@@ -31,6 +31,7 @@ require_once __DIR__ . '/../../controllers/AdminController.php';
 require_once __DIR__ . '/../../controllers/CompanyController.php'; // Include Company Controller
 require_once __DIR__ . '/../../controllers/UserController.php';
 require_once __DIR__ . '/../../controllers/JobController.php';
+require_once __DIR__ . '/../../models/CompanyContact.php';
 
 $adminController = new AdminController($pdo);
 $companyController = new CompanyController($pdo); // Instantiate Company Controller
@@ -50,6 +51,12 @@ if ($user['user_type'] === 'company') {
     $company = $adminController->getCompanyDetailsById($user_id); // New method call
 }
 
+$companyContact = null;
+if ($user['user_type'] === 'company') {
+    $companyContactModel = new CompanyContact($pdo);
+    $companyContact = $companyContactModel->getContactByUserId($user_id);
+}
+
 // Retrieve applications if the user is a seeker
 $seekerApplications = null;
 if ($user['user_type'] === 'seeker') {
@@ -59,7 +66,7 @@ if ($user['user_type'] === 'seeker') {
 // Retrieve applications if the user is a company
 $companyApplications = null;
 if ($user['user_type'] === 'company' && $company) {
-    // Retrieve applications for the company using the CompanyController
+    // Retrieve jobs posted for the Company
     $companyApplications = $jobController->getJobsByCompanyId($company['id']);
 }
 ?>
@@ -135,6 +142,38 @@ if ($user['user_type'] === 'company' && $company) {
 
                         <dt class="col-sm-3"><i class="bi bi-geo-alt-fill me-1"></i> Location:</dt>
                         <dd class="col-sm-9"><?php echo formatText($company['location'] ?? 'N/A'); ?></dd>
+                    </dl>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($companyContact): ?>
+            <div class="card shadow-lg border-0 rounded-lg mt-3">
+                <div class="card-header bg-info text-white py-3">
+                    <h5 class="card-title mb-0"><i class="bi bi-person-lines-fill me-1"></i> Point of Contact Details</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3"><i class="bi bi-person-fill me-1"></i> Name:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($companyContact['name'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-calendar-date me-1"></i> Age:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($companyContact['age'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-gender-ambiguous me-1"></i> Gender:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($companyContact['gender'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-envelope-fill me-1"></i> Email:</dt>
+                        <dd class="col-sm-9"><?php echo html_escape($companyContact['email'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-telephone-fill me-1"></i> Phone:</dt>
+                        <dd class="col-sm-9"><?php echo html_escape($companyContact['phone'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-briefcase-fill me-1"></i> Title:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($companyContact['title'] ?? 'N/A'); ?></dd>
+
+                        <dt class="col-sm-3"><i class="bi bi-building-fill me-1"></i> Department:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($companyContact['department'] ?? 'N/A'); ?></dd>
                     </dl>
                 </div>
             </div>

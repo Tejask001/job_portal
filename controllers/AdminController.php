@@ -36,12 +36,16 @@ class AdminController
 
     public function deleteUser($id)
     {
-        $deleted = $this->userModel->deleteUser($id);
+        try {
+            $deleted = $this->userModel->deleteUser($id);
 
-        if ($deleted) {
-            $_SESSION['success_message'] = "User deleted successfully!";
-        } else {
-            $_SESSION['error_message'] = "User deletion failed. Please try again.";
+            if ($deleted) {
+                $_SESSION['success_message'] = "User deleted successfully!";
+            } else {
+                $_SESSION['error_message'] = "User deletion failed. Please try again.";
+            }
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = "User deletion failed: " . $e->getMessage();
         }
         redirect($_SERVER['HTTP_REFERER'] ?? '/job_portal/views/admin/manage_users.php');
     }
