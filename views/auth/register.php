@@ -20,7 +20,7 @@ include __DIR__ . '/../layouts/header.php';
                                     <option value="company">Company</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="name_container">
                                 <label class="form-label" for="name"><i class="bi bi-person me-1"></i> Name:</label>
                                 <input class="form-control" id="name" type="text" name="name" placeholder="Enter your name" required />
                             </div>
@@ -45,5 +45,16 @@ include __DIR__ . '/../layouts/header.php';
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('user_type').addEventListener('change', function() {
+        var userType = this.value;
+        var nameLabel = (userType === 'company') ? 'Company Name' : 'Name';
+        var namePlaceholder = (userType === 'company') ? 'Enter your company name' : 'Enter your name';
+
+        document.querySelector('#name_container label').innerHTML = '<i class="bi bi-building me-1"></i> ' + nameLabel + ':';
+        document.getElementById('name').placeholder = namePlaceholder;
+    });
+</script>
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>
