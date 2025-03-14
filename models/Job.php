@@ -17,6 +17,13 @@ class Job
 
     public function getJobById($id)
     {
+        $stmt = $this->pdo->prepare("SELECT jobs.*, companies.company_name, companies.company_logo FROM jobs JOIN companies ON jobs.company_id = companies.id WHERE jobs.id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getJobApprovedByAdminbyId($id)
+    {
         $stmt = $this->pdo->prepare("SELECT jobs.*, companies.company_name, companies.company_logo FROM jobs JOIN companies ON jobs.company_id = companies.id WHERE jobs.id = ? AND jobs.admin_approval = 1");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

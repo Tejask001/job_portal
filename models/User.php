@@ -9,11 +9,11 @@ class User
         $this->pdo = $pdo;
     }
 
-    public function createUser($user_type, $name, $email, $password, $age = null, $gender = null, $experience = null)
+    public function createUser($user_type, $name, $email, $password, $age = null, $gender = null, $experience = null,  $phone_no = null)
     {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->pdo->prepare("INSERT INTO users (user_type, name, email, password, age, gender, experience) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$user_type, $name, $email, $hashed_password, $age, $gender, $experience]);
+        $stmt = $this->pdo->prepare("INSERT INTO users (user_type, name, email, password, age, gender, experience, phone_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$user_type, $name, $email, $hashed_password, $age, $gender, $experience, $phone_no]);
         return $this->pdo->lastInsertId();
     }
 
@@ -38,10 +38,10 @@ class User
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($id, $name, $email, $age, $gender, $experience)
+    public function updateUser($id, $name, $email, $age, $gender, $experience,  $phone_no)
     {
-        $stmt = $this->pdo->prepare("UPDATE users SET name = ?, email = ?, age = ?, gender = ?, experience = ? WHERE id = ?");
-        $stmt->execute([$name, $email, $age, $gender, $experience, $id]);
+        $stmt = $this->pdo->prepare("UPDATE users SET name = ?, email = ?, age = ?, gender = ?, experience = ?,  phone_no = ? WHERE id = ?");
+        $stmt->execute([$name, $email, $age, $gender, $experience, $phone_no,  $id]);
         return $stmt->rowCount();
     }
 

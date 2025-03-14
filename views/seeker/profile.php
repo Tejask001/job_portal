@@ -34,15 +34,19 @@ if (!$user) {
                 <form action="<?php echo generate_url('controllers/UserController.php?action=update_profile'); ?>" method="post">
                     <input type="hidden" name="id" value="<?php echo html_escape($user_id); ?>">
                     <div class="row g-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="name" class="form-label"><i class="bi bi-person me-1"></i> Name:</label>
                             <input type="text" class="form-control" id="name" name="name" value="<?php echo html_escape($user['name']); ?>" placeholder="Enter your name" required>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <label for="email" class="form-label"><i class="bi bi-envelope me-1"></i> Email:</label>
                             <input type="email" class="form-control" id="email" name="email" value="<?php echo html_escape($user['email']); ?>" placeholder="Enter your email" required>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
+                            <label for="phone_no" class="form-label"><i class="bi bi-envelope me-1"></i> Phone No:</label>
+                            <input type="text" class="form-control" id="phone_no" name="phone_no" value="<?php echo html_escape($user['phone_no']); ?>" placeholder="Enter your phone" required>
+                        </div>
+                        <div class="col-md-1">
                             <label for="age" class="form-label"><i class="bi bi-calendar-date me-1"></i> Age:</label>
                             <input type="number" class="form-control" id="age" name="age" value="<?php echo html_escape($user['age'] ?? ''); ?>" placeholder="Enter age">
                         </div>
@@ -57,7 +61,7 @@ if (!$user) {
                         </div>
                     </div>
                     <div class="row g-3 mt-2">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="experience" class="form-label"><i class="bi bi-briefcase me-1"></i> Experience:</label>
                             <input type="text" class="form-control" id="experience" name="experience" value="<?php echo html_escape($user['experience'] ?? ''); ?>" placeholder="e.g., 2+ years">
                         </div>

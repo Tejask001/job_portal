@@ -81,7 +81,7 @@ function generate_url($path)
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark shadow-sm bg-dark">
         <div class="container bg-dark" style="margin: 0px auto;">
-            <a class="navbar-brand" href="<?php echo generate_url('index.php'); ?>"><i class="bi bi-briefcase me-1"></i> Job Portal</a>
+            <a class="navbar-brand" href="<?php echo generate_url('index.php'); ?>"><i class="bi bi-briefcase me-1"></i>People's Consulting</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

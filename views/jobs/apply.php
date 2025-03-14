@@ -24,7 +24,7 @@ $jobModel = new Job($pdo);
 $userModel = new User($pdo); // Instatiate User Model
 $user = $userModel->getUserById($_SESSION['user_id']);  //Get User By id so its available for use
 
-$job = $jobModel->getJobById($job_id);
+$job = $jobModel->getJobApprovedByAdminbyId($job_id);
 
 if (!$job) {
     $_SESSION['error_message'] = "Job not found.";

@@ -30,7 +30,7 @@ class UserController
         $this->pdo = $pdo;
     }
 
-    public function updateUserProfile($id, $name, $email, $age = null, $gender = null, $experience = null)
+    public function updateUserProfile($id, $name, $email, $age = null, $gender = null, $experience = null, $phone_no = null)
     {
         // Validate input
         if (empty($name) || empty($email)) {
@@ -39,8 +39,13 @@ class UserController
             return;
         }
 
+        // Check if gender is empty and set it to null
+        if (empty($gender)) {
+            $gender = null;
+        }
+
         try {
-            $updated = $this->userModel->updateUserProfile($id, $name, $email, $age, $gender, $experience);
+            $updated = $this->userModel->updateUser($id, $name, $email, $age, $gender, $experience, $phone_no);
 
             if ($updated) {
                 $_SESSION['success_message'] = "Profile updated successfully!";
@@ -248,7 +253,7 @@ class UserController
     {
         // Additional security: You might want to require the user to re-enter their password before deleting the account.
 
-        $deleted = $this->userModel->deleteUserAccount($id);
+        $deleted = $this->userModel->deleteUser($id);
 
         if ($deleted) {
             //Clear session and redirect to logout or home page
@@ -321,7 +326,8 @@ class UserController
                         $_POST['email'] ?? '',
                         $_POST['age'] ?? null,
                         $_POST['gender'] ?? null,
-                        $_POST['experience'] ?? null
+                        $_POST['experience'] ?? null,
+                        $_POST['phone_no'] ?? null
                     );
                     break;
                 case 'upload_resume':

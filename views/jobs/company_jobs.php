@@ -49,7 +49,6 @@ $page_title = "Jobs at " . $company['company_name']; //Dynamic title update
             </div>
         <?php endif; ?>
 
-        <a href="<?php echo generate_url('views/company/company_details.php?id=' . html_escape($company_id)); ?>" class="btn btn-secondary mt-3"><i class="bi bi-arrow-left me-1"></i> Back to Company Details</a>
     </div>
 </div>
 
