@@ -84,6 +84,10 @@ function format_text($text)
                             <input class="form-check-input" type="checkbox" name="employment_type[]" value="parttime" id="parttime" <?php if (in_array('parttime', $employmentTypes)) echo 'checked'; ?>>
                             <label class="form-check-label" for="parttime"><i class="bi bi-moon"></i> Part-time</label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="employment_type[]" value="contract" id="contract" <?php if (in_array('contract', $employmentTypes)) echo 'checked'; ?>>
+                            <label class="form-check-label" for="contract"><i class="bi bi-moon"></i>Contract</label>
+                        </div>
                     </fieldset>
                 </div>
 

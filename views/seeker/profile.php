@@ -44,7 +44,7 @@ if (!$user) {
                         </div>
                         <div class="col-md-3">
                             <label for="phone_no" class="form-label"><i class="bi bi-envelope me-1"></i> Phone No:</label>
-                            <input type="text" class="form-control" id="phone_no" name="phone_no" value="<?php echo html_escape($user['phone_no']); ?>" placeholder="Enter your phone" required>
+                            <input type="text" class="form-control" id="phone_no" name="phone_no" value="<?php echo html_escape($user['phone_no'] ?? ''); ?>" placeholder="Enter your phone" required>
                         </div>
                         <div class="col-md-1">
                             <label for="age" class="form-label"><i class="bi bi-calendar-date me-1"></i> Age:</label>

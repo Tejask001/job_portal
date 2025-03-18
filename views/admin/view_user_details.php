@@ -94,6 +94,8 @@ if ($user['user_type'] === 'company' && $company) {
                     <dd class="col-sm-9"><?php echo html_escape($user['email']); ?></dd>
 
                     <?php if ($user['user_type'] === 'seeker'): ?>
+                        <dt class="col-sm-3"><i class="bi bi-telephone me-1"></i> Phone No:</dt>
+                        <dd class="col-sm-9"><?php echo formatText($user['phone_no'] ?? 'N/A'); ?></dd>
                         <dt class="col-sm-3"><i class="bi bi-calendar-date me-1"></i> Age:</dt>
                         <dd class="col-sm-9"><?php echo formatText($user['age'] ?? 'N/A'); ?></dd>
 
