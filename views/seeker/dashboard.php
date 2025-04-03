@@ -49,7 +49,7 @@ $jobModel = new Job($pdo);
                                             <?php endif; ?>
                                             <small class="d-block text-muted"><i class="bi bi-calendar-check me-1"></i> Applied on: <?php echo html_escape($application['applied_at']); ?></small>
                                         </div>
-                                        <div class="d-flex align-items-center">
+                                        <div class="application-actions d-flex align-items-center">
                                             <?php
                                             $status = html_escape($application['application_status']);
                                             $status_class = '';

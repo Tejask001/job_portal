@@ -23,6 +23,33 @@ function generate_url($path)
     <link rel="stylesheet" href="<?php echo generate_url('public/css/style.css'); ?>">
 
     <style>
+        /* media queries */
+        @media only screen and (max-width: 500px) {
+            .navbar-brand {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .card {
+                width: 100% !important;
+            }
+
+            .application-actions {
+                flex-direction: column;
+            }
+
+            .company-actions {
+                flex-direction: column;
+            }
+        }
+
         :root {
             --primary-color: #007bff;
             --secondary-color: #343a40;

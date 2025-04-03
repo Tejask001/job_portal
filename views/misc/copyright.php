@@ -49,13 +49,6 @@ include __DIR__ . '/../layouts/header.php';
         <li>A statement that the information in the notification is accurate, and under penalty of perjury, that you are authorized to act on behalf of the copyright owner.</li>
     </ul>
 
-    <p>Please send your copyright infringement claim to:</p>
-
-    <p>People's Consulting</p>
-    <p>Copyright Department</p>
-    <p>[Insert Company Address]</p>
-    <p>[Insert Company Email Address - Copyright Inquiries]</p>
-
     <h2>5. Counter-Notification</h2>
 
     <p>If you believe that your material that was removed (or to which access was disabled) is not infringing, or that you have the authorization from the copyright owner, the copyright owner's agent, or pursuant to the law, to post and use the material in your content, you may send a counter-notification containing the following information to the Copyright Department:</p>

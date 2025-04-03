@@ -38,7 +38,7 @@ function formatFieldName($fieldName)
         <h1 class="mb-4 text-center"><i class="bi bi-building me-2"></i> Company Dashboard</h1>
         <p class="text-muted text-center">Manage your job postings and company profile here.</p>
 
-        <div class="d-flex justify-content-center mb-5 gap-3">
+        <div class="company-actions d-flex justify-content-center mb-5 gap-3">
             <a href="<?php echo generate_url('views/company/post_job.php'); ?>" class="btn btn-primary btn-lg"><i class="bi bi-plus-circle me-1"></i> Post a Job</a>
             <a href="<?php echo generate_url('views/company/company_profile.php'); ?>" class="btn btn-secondary btn-lg"><i class="bi bi-pencil-square me-1"></i> Edit Profile</a>
             <a href="<?php echo generate_url('views/company/manage_applications.php'); ?>" class="btn btn-info text-white btn-lg"><i class="bi bi-clipboard-check me-1"></i> Manage Applications</a>
