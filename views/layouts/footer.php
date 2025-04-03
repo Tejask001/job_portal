@@ -3,39 +3,30 @@
 <footer class="bg-dark text-light py-4">
     <div class="container bg-dark">
         <div class="row">
+
             <!-- About The Company -->
-            <div class="col-md-3 mb-3">
-                <h5><i class="bi bi-info-circle me-1"></i> About The Company</h5>
-                <p class="mb-0">People Consultancy</p>
+            <div class="col-md-4 mb-3">
+                <h5> <img src="<?php echo generate_url('public/images/logo.jpeg'); ?>" alt="People's Consulting Logo" style="width: 80px; margin-right:10px">People's Consulting</h5>
+                <p class="mb-0">Your trusted partner for job opportunities and career advancement.</p>
             </div>
 
             <!-- Quick Links -->
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <h5><i class="bi bi-link-45deg me-1"></i> Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="<?php echo generate_url('views/misc/privacy.php'); ?>" class="text-light"><i class="bi bi-shield-lock me-1"></i> Privacy Policy</a></li>
+                    <li><a href="<?php echo generate_url('views/misc/privacy_policy.php'); ?>" class="text-light"><i class="bi bi-shield-lock me-1"></i> Privacy Policy</a></li>
                     <li><a href="<?php echo generate_url('views/misc/copyright.php'); ?>" class="text-light"><i class="bi bi-c-circle me-1"></i> Copyright Policy</a></li>
-                    <li><a href="<?php echo generate_url('views/misc/cookies.php'); ?>" class="text-light"><i class="bi bi-cookie me-1"></i> Cookie Policy</a></li>
-                </ul>
-            </div>
-
-            <!-- Let's Connect -->
-            <div class="col-md-3 mb-3">
-                <h5><i class="bi bi-chat-dots me-1"></i> Let's Connect</h5>
-                <ul class="list-unstyled">
-                    <li><a href="<?php echo generate_url('views/about.php'); ?>" class="text-light"><i class="bi bi-question-circle me-1"></i> About Us</a></li>
-                    <li><a href="<?php echo generate_url('views/contact.php'); ?>" class="text-light"><i class="bi bi-envelope me-1"></i> Contact</a></li>
                 </ul>
             </div>
 
             <!-- Follow Us -->
-            <div class="col-md-3 mb-3">
-                <h5><i class="bi bi-share-fill me-1"></i> Follow Us</h5>
+            <div class="col-md-4 mb-3">
+                <h5><i class="bi bi-share-fill me-1"></i> Stay Connected</h5>
+                <p>Follow us on social media for updates and opportunities!</p>
                 <div class="d-flex gap-3">
-                    <a href="#" class="text-light"><i class="bi bi-facebook fa-lg"></i></a>
-                    <a href="#" class="text-light"><i class="bi bi-twitter fa-lg"></i></a>
-                    <a href="#" class="text-light"><i class="bi bi-linkedin fa-lg"></i></a>
-                    <a href="#" class="text-light"><i class="bi bi-instagram fa-lg"></i></a>
+                    <a href="https://wa.me/916283951834" class="text-light"><i class="bi bi-whatsapp fa-lg"></i></a>
+                    <a href="https://www.linkedin.com/in/peoples-consulting-4a1b73220?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="text-light"><i class="bi bi-linkedin fa-lg"></i></a>
+                    <a href="https://www.instagram.com/peoples.consulting?igsh=MXdwejZuZXphZWt2OQ==" class="text-light"><i class="bi bi-instagram fa-lg"></i></a>
                 </div>
             </div>
         </div>
@@ -43,7 +34,7 @@
         <hr class="border-secondary">
 
         <div class="text-center">
-            <p class="mb-0"><i class="bi bi-c-circle me-1"></i><?php echo date('Y'); ?> All rights reserved</p>
+            <p class="mb-0"><i class="bi bi-c-circle me-1"></i> <?php echo date('Y'); ?> People's Consulting. All rights reserved.</p>
         </div>
     </div>
 </footer>
